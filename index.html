@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ลงทะเบียนรับสิทธิพิเศษ - โครงการบ้าน</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Container -->
+    <div class="glass-effect w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+        
+        <!-- Header Image (ใส่รูปบ้านสวยๆ เพื่อดึงดูด) -->
+        <div class="h-40 bg-blue-600 relative flex items-center justify-center">
+            <!-- สามารถเปลี่ยน src เป็นรูปโครงการบ้านของคุณได้ -->
+            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" alt="House" class="absolute inset-0 w-full h-full object-cover opacity-60">
+            <div class="relative z-10 text-center px-4">
+                <h1 class="text-2xl font-bold text-white drop-shadow-md">โครงการบ้านจัดสรร</h1>
+                <p class="text-blue-100 text-sm mt-1 drop-shadow">ลงทะเบียนรับข้อมูลและโปรโมชั่นพิเศษ</p>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="p-6 md:p-8">
+            <form id="leadForm" class="space-y-5">
+                
+                <!-- ชื่อ-นามสกุล -->
+                <div>
+                    <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">ชื่อ - นามสกุล <span class="text-red-500">*</span></label>
+                    <input type="text" id="fullName" required placeholder="กรอกชื่อของคุณ" 
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                </div>
+
+                <!-- เบอร์โทรศัพท์ -->
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์ <span class="text-red-500">*</span></label>
+                    <input type="tel" id="phone" required placeholder="08X-XXX-XXXX" pattern="[0-9]{10}"
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                    <p class="text-xs text-gray-500 mt-1">กรอกตัวเลข 10 หลัก ติดกัน</p>
+                </div>
+
+                <!-- สาขาร้านกาแฟ -->
+                <div>
+                    <label for="shopName" class="block text-sm font-medium text-gray-700 mb-1">คุณสแกน QR Code จากที่ไหน? <span class="text-red-500">*</span></label>
+                    <select id="shopName" required
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white">
+                        <option value="" disabled selected>-- กรุณาเลือกร้านกาแฟ --</option>
+                        <!-- คุณสามารถเพิ่มหรือแก้ไขชื่อร้านกาแฟตรงนี้ได้เลย -->
+                        <option value="ปัด • จุ • บัน Van Coffee Shop">ปัด • จุ • บัน Van Coffee Shop</option>
+                    </select>
+                </div>
+
+                <!-- ปุ่ม Submit -->
+                <button type="submit" id="submitBtn"
+                    class="w-full bg-[#00B900] hover:bg-[#009900] text-white font-medium py-3.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-green-200 mt-4">
+                    <!-- ไอคอน LINE -->
+                    <svg viewBox="0 0 24 24" class="w-6 h-6 fill-current">
+                        <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.846 10.036 9.608.391.084.922.258 1.057.592.114.281.072.717.035.997l-.239 1.428c-.066.411-.318 1.559 1.365.849 1.684-.71 9.098-5.36 10.973-8.816 1.033-1.895 1.488-3.715 1.488-5.264zm-15.08 2.809h-3.356c-.347 0-.629-.283-.629-.629v-5.201c0-.347.282-.629.629-.629.346 0 .628.282.628.629v4.572h2.728c.347 0 .628.282.628.629 0 .347-.281.629-.628.629zm2.083 0c-.346 0-.628-.282-.628-.629v-5.201c0-.347.282-.629.628-.629.347 0 .629.282.629.629v5.201c0 .347-.282.629-.629.629zm5.341-2.836c0 .346-.282.629-.629.629h-1.631v1.578h1.631c.347 0 .629.283.629.629 0 .347-.282.629-.629.629h-2.261c-.346 0-.628-.282-.628-.629v-5.201c0-.347.282-.629.628-.629h2.261c.347 0 .629.282.629.629 0 .347-.282.629-.629.629h-1.631v1.444h1.631c.347 0 .629.282.629.629zm4.276 2.836c-.161 0-.322-.061-.444-.183l-2.486-2.485v2.039c0 .347-.282.629-.629.629-.346 0-.628-.282-.628-.629v-5.201c0-.347.282-.629.628-.629.162 0 .323.06.444.183l2.485 2.484v-2.038c0-.347.282-.629.629-.629.346 0 .628.282.628.629v5.201c0 .347-.282.629-.628.629z"/>
+                    </svg>
+                    รับข้อมูลและคุยผ่าน LINE
+                </button>
+            </form>
+        </div>
+        
+        <!-- Loading Overlay (ซ่อนไว้ตอนแรก) -->
+        <div id="loadingOverlay" class="hidden absolute inset-0 bg-white/90 z-50 flex flex-col items-center justify-center">
+            <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+            <p class="mt-4 text-gray-700 font-medium">กำลังพาท่านไปที่ LINE...</p>
+        </div>
+    </div>
+
+    <p class="text-gray-400 text-xs mt-6 text-center">ข้อมูลของท่านจะถูกเก็บเป็นความลับ</p>
+
+    <!-- Script สำหรับส่งข้อมูลไป Google Sheets และไป LINE -->
+    <script>
+        // ลิงก์ LINE OA ของคุณ (@SURE141)
+        const LINE_URL = "https://line.me/R/ti/p/@SURE141"; 
+
+        // ⚠️ นำ URL เว็บแอปจาก Google Apps Script มาใส่ตรงนี้ ⚠️
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcuLvRe4ggE9kJuckF-FYKAw4IJ7IVjr92XOZsNCZ0yV2fGNZ6RLdsqku0zaTk3nSm/exec";
+
+        document.getElementById('leadForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            const shopName = document.getElementById('shopName').value;
+
+            // ตรวจสอบว่าได้ใส่ URL ของ Script หรือยัง
+            if (!SCRIPT_URL || SCRIPT_URL === "ใส่_URL_ที่ก๊อปปี้มาจาก_APPS_SCRIPT_ตรงนี้") {
+                alert("กรุณาใส่ SCRIPT_URL ในโค้ดก่อนครับ (ขณะทดสอบ ระบบจะพาท่านไปที่ LINE เลยโดยไม่เก็บข้อมูล)");
+                window.location.href = LINE_URL;
+                return;
+            }
+
+            // แสดงหน้ากำลังโหลด (หมุนๆ)
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+
+            // เตรียมข้อมูลเพื่อส่งไป Google Sheets
+            const formData = new FormData();
+            formData.append('fullName', fullName);
+            // เพิ่มเครื่องหมาย ' (Apostrophe) นำหน้าเพื่อบังคับให้ Google Sheets เก็บเลข 0 ไว้
+            formData.append('phone', "'" + phone);
+            formData.append('shopName', shopName);
+
+            try {
+                // ส่งข้อมูลไปที่ Google Sheets
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors' // สำคัญ: เพื่อไม่ให้เบราว์เซอร์บล็อคการส่งข้อมูลข้ามโดเมน
+                });
+
+                // ส่งข้อมูลเสร็จแล้ว เด้งพาไปที่แอป LINE ของคุณทันที
+                window.location.href = LINE_URL;
+
+            } catch (error) {
+                console.error("Error: ", error);
+                // หากเน็ตลูกค้ามีปัญหา ก็ยังคงพาลูกค้าไป LINE เพื่อไม่ให้เสียโอกาส
+                window.location.href = LINE_URL; 
+            }
+        });
+    </script>
+</body>
+</html>
