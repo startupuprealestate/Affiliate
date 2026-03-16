@@ -17,14 +17,71 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4">
+<body class="min-h-screen flex flex-col items-center justify-center p-4 relative">
 
-    <!-- Container -->
-    <div class="glass-effect w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+    <!-- ปุ่มลับสำหรับแอดมิน (ย้ายมาขวาบน) -->
+    <button id="openAdminBtn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors z-[60] p-2 bg-white/50 backdrop-blur-sm rounded-full shadow-sm" title="สำหรับผู้ดูแลระบบ">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+    </button>
+
+    <!-- Popup Modal -->
+    <div id="popupModal" class="hidden fixed inset-0 bg-black/70 z-[100] flex flex-col items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+        <div class="relative max-w-lg w-full bg-transparent rounded-2xl overflow-hidden transform transition-transform" id="popupContent">
+            <button id="closePopupBtn" class="absolute top-2 right-2 bg-black/50 text-white rounded-full p-2 hover:bg-black/80 z-10 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <img id="popupImage" src="" alt="Promotion Popup" class="w-full h-auto object-contain max-h-[80vh] rounded-2xl shadow-2xl">
+        </div>
+    </div>
+
+    <!-- Admin View (ซ่อนไว้ตอนแรก) -->
+    <div id="adminView" class="hidden glass-effect w-full max-w-md rounded-2xl shadow-2xl overflow-hidden mb-4 relative z-50">
+        <div class="bg-gray-800 p-4 text-white text-center font-bold text-xl flex justify-between items-center">
+            <span>ระบบหลังบ้าน</span>
+            <button id="backToHomeBtn" class="text-sm font-normal text-gray-300 hover:text-white bg-gray-700 px-3 py-1 rounded">ปิดหน้าต่างนี้</button>
+        </div>
         
-        <!-- Header Image (ใส่รูปบ้านสวยๆ เพื่อดึงดูด) -->
+        <!-- Login Form -->
+        <div id="adminLoginForm" class="p-6">
+            <p class="mb-4 text-sm text-gray-600">กรุณาใส่รหัสผ่านเพื่อเข้าสู่ระบบ</p>
+            <input type="password" id="adminPassword" placeholder="รหัสผ่าน" class="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-blue-500 mb-4 outline-none text-center tracking-widest">
+            <button id="loginAdminBtn" class="w-full bg-gray-800 text-white py-3 rounded-lg font-medium hover:bg-gray-900 transition-colors">เข้าสู่ระบบ</button>
+        </div>
+
+        <!-- Dashboard Form -->
+        <div id="adminDashboard" class="hidden p-6 space-y-5">
+            <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg border shadow-sm">
+                <span class="font-medium text-gray-700">เปิดแสดงป็อปอัพให้ลูกค้าเห็น</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="popupActiveToggle" class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00B900]"></div>
+                </label>
+            </div>
+
+            <div class="border border-gray-200 p-4 rounded-lg bg-white shadow-sm">
+                <label class="block text-sm font-medium text-gray-700 mb-2">อัปโหลดรูปภาพใหม่ (จะถูกย่อขนาดให้อัตโนมัติ)</label>
+                <input type="file" id="popupImageUpload" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                
+                <div class="mt-4 border border-dashed border-gray-300 rounded-lg p-2 bg-gray-50 relative min-h-[150px] flex items-center justify-center overflow-hidden">
+                    <p id="noImageText" class="text-sm text-gray-400 absolute">ยังไม่มีรูปภาพป็อปอัพ</p>
+                    <img id="adminImagePreview" src="" class="w-full h-auto max-h-48 object-contain rounded hidden relative z-10">
+                </div>
+            </div>
+
+            <button id="savePopupBtn" class="w-full bg-blue-600 text-white py-3.5 rounded-lg font-medium hover:bg-blue-700 transition-colors flex justify-center items-center shadow-lg">
+                บันทึกการตั้งค่าป็อปอัพ
+            </button>
+            <div class="text-center">
+                <button id="logoutAdminBtn" class="text-red-500 text-sm hover:underline mt-2">ออกจากระบบหลังบ้าน</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container สำหรับลูกค้า -->
+    <div id="mainView" class="glass-effect w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+        
+        <!-- Header Image -->
         <div class="h-40 bg-blue-600 relative flex items-center justify-center">
-            <!-- สามารถเปลี่ยน src เป็นรูปโครงการบ้านของคุณได้ -->
             <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" alt="House" class="absolute inset-0 w-full h-full object-cover opacity-60">
             <div class="relative z-10 text-center px-4">
                 <h1 class="text-2xl font-bold text-white drop-shadow-md">โครงการบ้านจัดสรร</h1>
@@ -51,14 +108,14 @@
                     <p class="text-xs text-gray-500 mt-1">กรอกตัวเลข 10 หลัก ติดกัน</p>
                 </div>
 
-                <!-- สาขาร้านกาแฟ -->
-                <div>
+                <!-- สาขาร้านกาแฟ (ตัวนี้จะถูกซ่อนอัตโนมัติหากเข้าจากลิงก์ร้านกาแฟ) -->
+                <div id="shopFieldContainer">
                     <label for="shopName" class="block text-sm font-medium text-gray-700 mb-1">คุณสแกน QR Code จากที่ไหน? <span class="text-red-500">*</span></label>
                     <select id="shopName" required
                         class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white">
-                        <option value="" disabled selected>-- กรุณาเลือกร้านกาแฟ --</option>
-                        <!-- คุณสามารถเพิ่มหรือแก้ไขชื่อร้านกาแฟตรงนี้ได้เลย -->
-                        <option value="ปัด • จุ • บัน Van Coffee Shop">ปัด • จุ • บัน Van Coffee Shop</option>
+                        <option value="" disabled selected>-- กรุณาเลือก --</option>
+                        <option value="ปัด • จุ • บัน Van Coffee Shop">ร้าน ปัด • จุ • บัน Van Coffee Shop</option>
+                        <option value="อื่นๆ (แผ่นพับ, ใบปลิว, นามบัตร)">อื่นๆ (แผ่นพับ, ใบปลิว, นามบัตร)</option>
                     </select>
                 </div>
 
@@ -74,61 +131,230 @@
             </form>
         </div>
         
-        <!-- Loading Overlay (ซ่อนไว้ตอนแรก) -->
+        <!-- Loading Overlay -->
         <div id="loadingOverlay" class="hidden absolute inset-0 bg-white/90 z-50 flex flex-col items-center justify-center">
             <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
             <p class="mt-4 text-gray-700 font-medium">กำลังพาท่านไปที่ LINE...</p>
         </div>
     </div>
 
-    <p class="text-gray-400 text-xs mt-6 text-center">ข้อมูลของท่านจะถูกเก็บเป็นความลับ</p>
+    <div class="mt-6 text-center">
+        <p class="text-gray-400 text-xs">ข้อมูลของท่านจะถูกเก็บเป็นความลับ</p>
+    </div>
 
     <!-- Script สำหรับส่งข้อมูลไป Google Sheets และไป LINE -->
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
         // ลิงก์ LINE OA ของคุณ (@SURE141)
         const LINE_URL = "https://line.me/R/ti/p/@SURE141"; 
-
-        // ⚠️ นำ URL เว็บแอปจาก Google Apps Script มาใส่ตรงนี้ ⚠️
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcuLvRe4ggE9kJuckF-FYKAw4IJ7IVjr92XOZsNCZ0yV2fGNZ6RLdsqku0zaTk3nSm/exec";
+
+        // ----------------------------------------------------
+        // ส่วนการอ่านค่า URL เพื่อซ่อนตัวเลือกร้านกาแฟอัตโนมัติ
+        // ----------------------------------------------------
+        const urlParams = new URLSearchParams(window.location.search);
+        const shopParam = urlParams.get('shop');
+        let hiddenShopName = null;
+
+        if (shopParam) {
+            hiddenShopName = shopParam;
+            // ถ้าลิงก์มีการระบุ ?shop=... มา ให้ซ่อนช่องเลือกร้านไปเลย ลูกค้าจะได้ไม่ต้องกดเลือกเอง
+            document.getElementById('shopFieldContainer').classList.add('hidden');
+            document.getElementById('shopName').removeAttribute('required');
+        }
+
+        // ==========================================
+        // ระบบจัดการป็อปอัพ (หลังบ้าน) ด้วยฐานข้อมูล
+        // ==========================================
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // 1. ตั้งรหัสผ่านใหม่ตามที่แจ้งมา
+        const ADMIN_PIN = "SURE0635824615";
+        let currentUser = null;
+        let isPopupShowing = false;
+        let currentPopupData = null; // เก็บข้อมูลป็อปอัพล่าสุด
+
+        const mainView = document.getElementById('mainView');
+        const adminView = document.getElementById('adminView');
+        const popupModal = document.getElementById('popupModal');
+        
+        const initAuth = async () => {
+            try { 
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth); 
+                }
+            } 
+            catch (error) { console.error("Auth error:", error); }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) loadPopupSettings();
+        });
+        initAuth();
+
+        function loadPopupSettings() {
+            if (!currentUser) return;
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'popup_config', 'settings');
+            
+            onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    currentPopupData = data; // เก็บข้อมูลไว้ใช้ตอนปิดหน้าแอดมิน
+                    
+                    document.getElementById('popupActiveToggle').checked = data.isActive === true;
+                    if (data.imageUrl) {
+                        document.getElementById('adminImagePreview').src = data.imageUrl;
+                        document.getElementById('adminImagePreview').classList.remove('hidden');
+                        document.getElementById('noImageText').classList.add('hidden');
+                        
+                        // แสดง Popup ทันที ถ้าเปิดให้แสดง และไม่ได้อยู่ในหน้าแอดมิน
+                        if (data.isActive && adminView.classList.contains('hidden') && !isPopupShowing) {
+                            document.getElementById('popupImage').src = data.imageUrl;
+                            popupModal.classList.remove('hidden');
+                            isPopupShowing = true;
+                        }
+                    }
+                }
+            }, (error) => console.error(error));
+        }
+
+        document.getElementById('closePopupBtn').addEventListener('click', () => {
+            popupModal.classList.add('hidden');
+        });
+
+        // 3. ระบบล็อกอินแอดมิน
+        document.getElementById('openAdminBtn').addEventListener('click', () => {
+            mainView.classList.add('hidden');
+            adminView.classList.remove('hidden');
+        });
+
+        document.getElementById('backToHomeBtn').addEventListener('click', () => {
+            adminView.classList.add('hidden');
+            mainView.classList.remove('hidden');
+            document.getElementById('adminPassword').value = '';
+            
+            // แก้ไขเรื่อง Popup: พอกดปิดหน้าแอดมิน ให้เช็คแล้วโชว์ Popup ทันที
+            if (currentPopupData && currentPopupData.isActive && currentPopupData.imageUrl) {
+                document.getElementById('popupImage').src = currentPopupData.imageUrl;
+                popupModal.classList.remove('hidden');
+                isPopupShowing = true;
+            }
+        });
+
+        document.getElementById('loginAdminBtn').addEventListener('click', () => {
+            if (document.getElementById('adminPassword').value === ADMIN_PIN) {
+                document.getElementById('adminLoginForm').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+            } else {
+                alert("รหัสผ่านไม่ถูกต้อง");
+            }
+        });
+
+        document.getElementById('logoutAdminBtn').addEventListener('click', () => {
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('adminLoginForm').classList.remove('hidden');
+            document.getElementById('adminPassword').value = '';
+        });
+
+        // 4. ระบบอัปโหลดและย่อขนาดรูปภาพ
+        let uploadedBase64 = null;
+        document.getElementById('popupImageUpload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 800;
+                    let w = img.width, h = img.height;
+                    if (w > MAX_WIDTH) { h = Math.round((h * MAX_WIDTH) / w); w = MAX_WIDTH; }
+                    canvas.width = w; canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    
+                    uploadedBase64 = canvas.toDataURL('image/webp', 0.8);
+                    
+                    document.getElementById('adminImagePreview').src = uploadedBase64;
+                    document.getElementById('adminImagePreview').classList.remove('hidden');
+                    document.getElementById('noImageText').classList.add('hidden');
+                };
+            };
+        });
+
+        // 5. บันทึกข้อมูลตั้งค่า
+        document.getElementById('savePopupBtn').addEventListener('click', async () => {
+            if (!currentUser) return alert("กำลังเชื่อมต่อระบบ กรุณารอสักครู่");
+            const btn = document.getElementById('savePopupBtn');
+            btn.innerHTML = "กำลังบันทึก...";
+            
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'popup_config', 'settings');
+                const dataToSave = { 
+                    isActive: document.getElementById('popupActiveToggle').checked 
+                };
+                
+                if (uploadedBase64) {
+                    dataToSave.imageUrl = uploadedBase64;
+                } else if (document.getElementById('adminImagePreview').src) {
+                    dataToSave.imageUrl = document.getElementById('adminImagePreview').src;
+                }
+
+                await setDoc(docRef, dataToSave, { merge: true });
+                alert("บันทึกการตั้งค่าป็อปอัพเรียบร้อย!\n(กดปุ่ม 'ปิดหน้าต่างนี้' เพื่อดูตัวอย่าง Popup)");
+            } catch (error) {
+                console.error(error);
+                alert("เกิดข้อผิดพลาดในการบันทึก");
+            } finally {
+                btn.innerHTML = "บันทึกการตั้งค่าป็อปอัพ";
+            }
+        });
+
+        // ==========================================
+        // ส่วนจัดการฟอร์มลงทะเบียนลูกค้า
+        // ==========================================
 
         document.getElementById('leadForm').addEventListener('submit', async (e) => {
             e.preventDefault(); 
 
             const fullName = document.getElementById('fullName').value;
             const phone = document.getElementById('phone').value;
-            const shopName = document.getElementById('shopName').value;
+            
+            // เลือกว่าจะเอาชื่อร้านจาก URL ที่ซ่อนไว้ หรือ จากการที่ลูกค้าเลือกใน Dropdown
+            let finalShopName = hiddenShopName || document.getElementById('shopName').value;
+            if(!finalShopName) finalShopName = "ไม่ระบุแหล่งที่มา";
 
-            // ตรวจสอบว่าได้ใส่ URL ของ Script หรือยัง
-            if (!SCRIPT_URL || SCRIPT_URL === "ใส่_URL_ที่ก๊อปปี้มาจาก_APPS_SCRIPT_ตรงนี้") {
-                alert("กรุณาใส่ SCRIPT_URL ในโค้ดก่อนครับ (ขณะทดสอบ ระบบจะพาท่านไปที่ LINE เลยโดยไม่เก็บข้อมูล)");
-                window.location.href = LINE_URL;
-                return;
-            }
-
-            // แสดงหน้ากำลังโหลด (หมุนๆ)
             document.getElementById('loadingOverlay').classList.remove('hidden');
 
-            // เตรียมข้อมูลเพื่อส่งไป Google Sheets
             const formData = new FormData();
             formData.append('fullName', fullName);
-            // เพิ่มเครื่องหมาย ' (Apostrophe) นำหน้าเพื่อบังคับให้ Google Sheets เก็บเลข 0 ไว้
-            formData.append('phone', "'" + phone);
-            formData.append('shopName', shopName);
+            formData.append('phone', "'" + phone); // ใส่ ' ป้องกัน Google ตัดเลข 0
+            formData.append('shopName', finalShopName);
 
             try {
-                // ส่งข้อมูลไปที่ Google Sheets
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
                     body: formData,
-                    mode: 'no-cors' // สำคัญ: เพื่อไม่ให้เบราว์เซอร์บล็อคการส่งข้อมูลข้ามโดเมน
+                    mode: 'no-cors' 
                 });
 
-                // ส่งข้อมูลเสร็จแล้ว เด้งพาไปที่แอป LINE ของคุณทันที
                 window.location.href = LINE_URL;
 
             } catch (error) {
                 console.error("Error: ", error);
-                // หากเน็ตลูกค้ามีปัญหา ก็ยังคงพาลูกค้าไป LINE เพื่อไม่ให้เสียโอกาส
                 window.location.href = LINE_URL; 
             }
         });
