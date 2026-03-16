@@ -27,12 +27,11 @@
         }
     </style>
 </head>
-<!-- ปรับให้ล็อคหน้าจอ 100dvh และไม่ให้ scroll เลย (overflow-hidden) -->
 <body class="h-[100dvh] w-screen flex flex-col items-center justify-center p-3 sm:p-4 relative overflow-hidden">
 
-    <!-- พื้นหลังเว็บไซต์ (รูปบ้านจางๆ) -->
+    <!-- พื้นหลังเว็บไซต์ (ซ่อนเริ่มต้นด้วย opacity-0 และค่อยๆ เฟดอินเมื่อโหลดเสร็จ) -->
     <div class="fixed inset-0 z-[-10] bg-blue-50/50">
-        <img id="pageBackgroundImage" src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80" alt="Background" class="w-full h-full object-cover opacity-25">
+        <img id="pageBackgroundImage" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Background" class="w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out">
     </div>
 
     <!-- ปุ่มลับสำหรับแอดมิน -->
@@ -49,7 +48,6 @@
                 </button>
                 <img id="popupImage" src="" alt="Promotion Popup" class="w-full h-auto object-contain max-h-[85vh] rounded-2xl shadow-2xl mx-auto">
             </div>
-            <!-- เพิ่มตัวเลือกไม่แสดง 24 ชม. -->
             <div class="mt-4 bg-black/60 backdrop-blur-md rounded-full px-5 py-2.5 flex items-center gap-2 border border-white/20 shadow-lg">
                 <input type="checkbox" id="hidePopup24h" class="w-4 h-4 rounded text-blue-500 focus:ring-blue-500 bg-gray-700 border-gray-600 cursor-pointer">
                 <label for="hidePopup24h" class="text-white text-sm font-medium cursor-pointer select-none">ไม่แสดงหน้านี้อีกภายใน 24 ชั่วโมง</label>
@@ -67,17 +65,13 @@
             <button id="backToHomeBtn" class="text-xs font-medium text-gray-200 hover:text-white bg-gray-700 px-3 py-1.5 rounded-lg transition-colors">ปิดหน้าต่างนี้</button>
         </div>
         
-        <!-- Login Form -->
         <div id="adminLoginForm" class="p-6 sm:p-8 flex-1 flex flex-col justify-center">
             <p class="mb-4 text-sm text-gray-600 text-center">กรุณาใส่รหัสผ่านเพื่อเข้าสู่ระบบ</p>
             
-            <!-- เพิ่มระบบลูกตาที่ช่องรหัสผ่าน -->
             <div class="relative mb-5">
                 <input type="password" id="adminPassword" placeholder="รหัสผ่าน" class="w-full px-5 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-center tracking-widest text-lg bg-white/80 pr-12">
                 <button type="button" id="togglePasswordBtn" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
-                    <!-- Icon Eye Open -->
                     <svg id="eyeOpenIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                    <!-- Icon Eye Closed (ซ่อนเริ่มต้น) -->
                     <svg id="eyeClosedIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
                 </button>
             </div>
@@ -85,7 +79,6 @@
             <button id="loginAdminBtn" class="w-full bg-gray-800 text-white py-3 rounded-xl font-medium hover:bg-gray-900 transition-colors shadow-md">เข้าสู่ระบบ</button>
         </div>
 
-        <!-- Dashboard Form -->
         <div id="adminDashboard" class="hidden p-4 sm:p-5 space-y-4 overflow-y-auto flex-1">
             <div class="flex items-center justify-between bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
                 <span class="font-medium text-gray-700 text-sm">เปิดแสดงป็อปอัพให้ลูกค้าเห็น</span>
@@ -132,22 +125,19 @@
     </div>
 
     <!-- Container สำหรับลูกค้า -->
-    <!-- ปรับความสูงรวมให้อยู่ในกรอบ 95dvh ให้พอดีจอที่สุด -->
     <div id="mainView" class="glass-effect w-full max-w-md rounded-[1.5rem] overflow-hidden flex flex-col shadow-2xl max-h-[92dvh]">
         
-        <!-- Header Text (กระชับพื้นที่) -->
         <div class="pt-5 pb-3 px-6 text-center bg-white/95 border-b border-gray-100 relative shrink-0">
             <h1 class="text-xl md:text-2xl font-bold text-[#0B3D1B] tracking-tight">ลงทะเบียน</h1>
             <p class="text-[#0B3D1B] font-medium text-xs md:text-sm mt-1">รับข้อมูลและโปรโมชั่นพิเศษ</p>
         </div>
 
-        <!-- Header Image (ลดความสูงลงนิดหน่อยให้พอดีจอ) -->
+        <!-- Header Image (ซ่อนเริ่มต้นด้วย opacity-0 และค่อยๆ เฟดอินเมื่อโหลดเสร็จ) -->
         <div class="h-24 sm:h-32 bg-gray-200 relative w-full overflow-hidden shrink-0">
-            <img id="mainHeaderImage" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" alt="House" class="w-full h-full object-cover">
+            <img id="mainHeaderImage" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="House" class="w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out">
             <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none"></div>
         </div>
 
-        <!-- Form Section -->
         <div class="p-5 bg-white/60 flex-1 overflow-y-auto">
             <form id="leadForm" class="space-y-3.5">
                 
@@ -189,7 +179,6 @@
         </div>
     </div>
 
-    <!-- ย้ายขึ้นมานิดหน่อยให้ไม่โดนขอบจอบัง -->
     <div class="mt-3 sm:mt-4 shrink-0 text-center bg-white/40 px-5 py-1.5 rounded-full backdrop-blur-sm shadow-sm border border-white/50">
         <p class="text-gray-600 text-[11px] sm:text-xs font-medium">ข้อมูลของท่านจะถูกเก็บเป็นความลับอย่างปลอดภัย</p>
     </div>
@@ -199,13 +188,9 @@
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // ลิงก์ LINE OA
         const LINE_URL = "https://line.me/R/ti/p/@SURE141"; 
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcuLvRe4ggE9kJuckF-FYKAw4IJ7IVjr92XOZsNCZ0yV2fGNZ6RLdsqku0zaTk3nSm/exec";
 
-        // ==========================================
-        // Firebase Config ของคุณ
-        // ==========================================
         const YOUR_FIREBASE_CONFIG = {
             apiKey: "AIzaSyAm3UhBeh1eli5pqwj5M2psXy1BnpQUI-Y",
             authDomain: "affiliate-583a4.firebaseapp.com",
@@ -230,24 +215,45 @@
         let currentPopupData = null; 
         let isPopupShowing = false;
 
-        // ฟังก์ชันตรวจสอบว่าควรแสดง Popup หรือไม่ (เช็ค 24 ชั่วโมง)
         function shouldShowPopup() {
             const hiddenUntil = localStorage.getItem('hidePopupUntil');
             if (hiddenUntil) {
                 if (Date.now() < parseInt(hiddenUntil, 10)) {
-                    return false; // ยังไม่ครบ 24 ชม. ไม่ต้องแสดง
+                    return false; 
                 } else {
-                    localStorage.removeItem('hidePopupUntil'); // หมดเวลาแล้ว ลบทิ้ง
+                    localStorage.removeItem('hidePopupUntil'); 
                 }
             }
             return true;
+        }
+
+        // ฟังก์ชันโหลดรูปภาพแบบไม่ให้กระพริบ
+        function setImages(bgUrl, headerUrl) {
+            const bgImg = document.getElementById('pageBackgroundImage');
+            const targetBg = bgUrl || "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80";
+            if (bgImg.getAttribute('src') !== targetBg) {
+                bgImg.onload = () => { bgImg.classList.remove('opacity-0'); bgImg.classList.add('opacity-25'); };
+                bgImg.src = targetBg;
+            } else {
+                bgImg.classList.remove('opacity-0'); 
+                bgImg.classList.add('opacity-25');
+            }
+
+            const headerImg = document.getElementById('mainHeaderImage');
+            const targetHeader = headerUrl || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80";
+            if (headerImg.getAttribute('src') !== targetHeader) {
+                headerImg.onload = () => { headerImg.classList.remove('opacity-0'); headerImg.classList.add('opacity-100'); };
+                headerImg.src = targetHeader;
+            } else {
+                headerImg.classList.remove('opacity-0');
+                headerImg.classList.add('opacity-100');
+            }
         }
 
         const mainView = document.getElementById('mainView');
         const adminView = document.getElementById('adminView');
         const popupModal = document.getElementById('popupModal');
 
-        // สคริปต์สลับเปิดปิดตา (ซ่อน/แสดงรหัสผ่าน)
         const togglePasswordBtn = document.getElementById('togglePasswordBtn');
         const adminPasswordInput = document.getElementById('adminPassword');
         const eyeOpenIcon = document.getElementById('eyeOpenIcon');
@@ -274,12 +280,12 @@
             adminView.classList.add('hidden');
             mainView.classList.remove('hidden');
             document.getElementById('adminPassword').value = '';
-            adminPasswordInput.type = 'password'; // รีเซ็ตตาให้กลับไปซ่อนเหมือนเดิม
+            adminPasswordInput.type = 'password'; 
             eyeOpenIcon.classList.remove('hidden');
             eyeClosedIcon.classList.add('hidden');
             
             if (currentPopupData && currentPopupData.isActive && currentPopupData.imageUrl && shouldShowPopup()) {
-                document.getElementById('hidePopup24h').checked = false; // เคลียร์ช่องติ๊กเมื่อโชว์ขึ้นมาใหม่
+                document.getElementById('hidePopup24h').checked = false; 
                 document.getElementById('popupImage').src = currentPopupData.imageUrl;
                 popupModal.classList.remove('hidden');
                 isPopupShowing = true;
@@ -308,16 +314,12 @@
             popupModal.classList.add('hidden');
             isPopupShowing = false;
             
-            // ถ้าติ๊กกล่องให้ซ่อน 24 ชม. ให้บันทึกเวลาปัจจุบัน + 24 ชม.
             if (document.getElementById('hidePopup24h').checked) {
                 const hideUntil = Date.now() + (24 * 60 * 60 * 1000); 
                 localStorage.setItem('hidePopupUntil', hideUntil);
             }
         });
 
-        // ==========================================
-        // ระบบจัดการป็อปอัพและรูปภาพ
-        // ==========================================
         let currentUser = null;
         let db = null;
         let auth = null;
@@ -348,7 +350,7 @@
                             await signInAnonymously(auth); 
                         }
                     } 
-                    catch (error) { console.error("Auth error:", error); }
+                    catch (error) { console.error("Auth error:", error); setImages(null, null); }
                 };
 
                 onAuthStateChanged(auth, (user) => {
@@ -356,13 +358,19 @@
                     if (user) loadPopupSettings();
                 });
                 initAuth();
+            } else {
+                setImages(null, null); // โหลดรูปเริ่มต้นกรณีไม่มี Config
             }
         } catch (err) {
             console.error("Firebase init failed:", err);
+            setImages(null, null); // โหลดรูปเริ่มต้นกรณี Error
         }
 
         function loadPopupSettings() {
-            if (!currentUser || !db || dbPath.length === 0) return;
+            if (!currentUser || !db || dbPath.length === 0) {
+                setImages(null, null);
+                return;
+            }
             const docRef = doc(db, ...dbPath);
             
             onSnapshot(docRef, (docSnap) => {
@@ -385,22 +393,26 @@
                         }
                     }
 
+                    // เรียกใช้ฟังก์ชันเซ็ตภาพพื้นหลัง/หน้าปก โดยไม่ให้กระพริบ
+                    setImages(data.bgImageUrl, data.headerImageUrl);
+
                     if (data.headerImageUrl) {
-                        document.getElementById('mainHeaderImage').src = data.headerImageUrl;
                         document.getElementById('adminHeaderImagePreview').src = data.headerImageUrl;
                         document.getElementById('adminHeaderImagePreview').classList.remove('hidden');
                         document.getElementById('noHeaderImageText').classList.add('hidden');
                     }
 
                     if (data.bgImageUrl) {
-                        document.getElementById('pageBackgroundImage').src = data.bgImageUrl;
                         document.getElementById('adminBgImagePreview').src = data.bgImageUrl;
                         document.getElementById('adminBgImagePreview').classList.remove('hidden');
                         document.getElementById('noBgImageText').classList.add('hidden');
                     }
+                } else {
+                    setImages(null, null);
                 }
             }, (error) => {
                 console.error("Snapshot Error: ", error);
+                setImages(null, null);
             });
         }
 
@@ -489,9 +501,6 @@
             }
         });
 
-        // ==========================================
-        // ส่วนจัดการฟอร์มลงทะเบียนลูกค้า
-        // ==========================================
         document.getElementById('leadForm').addEventListener('submit', async (e) => {
             e.preventDefault(); 
 
