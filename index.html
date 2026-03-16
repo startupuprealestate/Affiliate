@@ -2,127 +2,181 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ลงทะเบียนรับสิทธิพิเศษ - โครงการบ้าน</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Prompt', sans-serif;
-            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-color: #f0f4f8; 
         }
         .glass-effect {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        .btn-hover-effect {
+            transition: all 0.3s ease;
+        }
+        .btn-hover-effect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 185, 0, 0.4);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 relative">
+<!-- ปรับให้ล็อคหน้าจอ 100dvh และไม่ให้ scroll เลย (overflow-hidden) -->
+<body class="h-[100dvh] w-screen flex flex-col items-center justify-center p-3 sm:p-4 relative overflow-hidden">
 
-    <!-- ปุ่มลับสำหรับแอดมิน (ย้ายมาขวาบน) -->
-    <button id="openAdminBtn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors z-[60] p-2 bg-white/50 backdrop-blur-sm rounded-full shadow-sm" title="สำหรับผู้ดูแลระบบ">
-        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+    <!-- พื้นหลังเว็บไซต์ (รูปบ้านจางๆ) -->
+    <div class="fixed inset-0 z-[-10] bg-blue-50/50">
+        <img id="pageBackgroundImage" src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80" alt="Background" class="w-full h-full object-cover opacity-25">
+    </div>
+
+    <!-- ปุ่มลับสำหรับแอดมิน -->
+    <button id="openAdminBtn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 focus:outline-none transition-colors z-[60] p-2 bg-white/60 backdrop-blur-md rounded-full shadow-sm hover:shadow-md border border-white/50" title="สำหรับผู้ดูแลระบบ">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
     </button>
 
     <!-- Popup Modal -->
-    <div id="popupModal" class="hidden fixed inset-0 bg-black/70 z-[100] flex flex-col items-center justify-center p-4 backdrop-blur-sm transition-opacity">
-        <div class="relative max-w-lg w-full bg-transparent rounded-2xl overflow-hidden transform transition-transform" id="popupContent">
-            <button id="closePopupBtn" class="absolute top-2 right-2 bg-black/50 text-white rounded-full p-2 hover:bg-black/80 z-10 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <img id="popupImage" src="" alt="Promotion Popup" class="w-full h-auto object-contain max-h-[80vh] rounded-2xl shadow-2xl">
+    <div id="popupModal" class="hidden fixed inset-0 bg-black/75 z-[100] flex flex-col items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+        <div class="relative max-w-lg w-full bg-transparent rounded-2xl overflow-hidden transform transition-transform scale-95 flex flex-col items-center" id="popupContent">
+            <div class="relative w-full">
+                <button id="closePopupBtn" class="absolute top-3 right-3 bg-black/50 text-white rounded-full p-2 hover:bg-black/80 z-10 transition-colors backdrop-blur-md">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <img id="popupImage" src="" alt="Promotion Popup" class="w-full h-auto object-contain max-h-[85vh] rounded-2xl shadow-2xl mx-auto">
+            </div>
+            <!-- เพิ่มตัวเลือกไม่แสดง 24 ชม. -->
+            <div class="mt-4 bg-black/60 backdrop-blur-md rounded-full px-5 py-2.5 flex items-center gap-2 border border-white/20 shadow-lg">
+                <input type="checkbox" id="hidePopup24h" class="w-4 h-4 rounded text-blue-500 focus:ring-blue-500 bg-gray-700 border-gray-600 cursor-pointer">
+                <label for="hidePopup24h" class="text-white text-sm font-medium cursor-pointer select-none">ไม่แสดงหน้านี้อีกภายใน 24 ชั่วโมง</label>
+            </div>
         </div>
     </div>
 
-    <!-- Admin View (ซ่อนไว้ตอนแรก) -->
-    <div id="adminView" class="hidden glass-effect w-full max-w-md rounded-2xl shadow-2xl overflow-hidden mb-4 relative z-50">
-        <div class="bg-gray-800 p-4 text-white text-center font-bold text-xl flex justify-between items-center">
-            <span>ระบบหลังบ้าน</span>
-            <button id="backToHomeBtn" class="text-sm font-normal text-gray-300 hover:text-white bg-gray-700 px-3 py-1 rounded">ปิดหน้าต่างนี้</button>
+    <!-- Admin View -->
+    <div id="adminView" class="hidden glass-effect w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative z-50 flex flex-col max-h-[90dvh]">
+        <div class="bg-gray-800 p-3 sm:p-4 text-white text-center font-bold text-base sm:text-lg flex justify-between items-center shrink-0">
+            <span class="flex items-center gap-2">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                ระบบหลังบ้าน
+            </span>
+            <button id="backToHomeBtn" class="text-xs font-medium text-gray-200 hover:text-white bg-gray-700 px-3 py-1.5 rounded-lg transition-colors">ปิดหน้าต่างนี้</button>
         </div>
         
         <!-- Login Form -->
-        <div id="adminLoginForm" class="p-6">
-            <p class="mb-4 text-sm text-gray-600">กรุณาใส่รหัสผ่านเพื่อเข้าสู่ระบบ</p>
-            <input type="password" id="adminPassword" placeholder="รหัสผ่าน" class="w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-blue-500 mb-4 outline-none text-center tracking-widest">
-            <button id="loginAdminBtn" class="w-full bg-gray-800 text-white py-3 rounded-lg font-medium hover:bg-gray-900 transition-colors">เข้าสู่ระบบ</button>
+        <div id="adminLoginForm" class="p-6 sm:p-8 flex-1 flex flex-col justify-center">
+            <p class="mb-4 text-sm text-gray-600 text-center">กรุณาใส่รหัสผ่านเพื่อเข้าสู่ระบบ</p>
+            
+            <!-- เพิ่มระบบลูกตาที่ช่องรหัสผ่าน -->
+            <div class="relative mb-5">
+                <input type="password" id="adminPassword" placeholder="รหัสผ่าน" class="w-full px-5 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-center tracking-widest text-lg bg-white/80 pr-12">
+                <button type="button" id="togglePasswordBtn" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+                    <!-- Icon Eye Open -->
+                    <svg id="eyeOpenIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    <!-- Icon Eye Closed (ซ่อนเริ่มต้น) -->
+                    <svg id="eyeClosedIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
+                </button>
+            </div>
+
+            <button id="loginAdminBtn" class="w-full bg-gray-800 text-white py-3 rounded-xl font-medium hover:bg-gray-900 transition-colors shadow-md">เข้าสู่ระบบ</button>
         </div>
 
         <!-- Dashboard Form -->
-        <div id="adminDashboard" class="hidden p-6 space-y-5">
-            <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg border shadow-sm">
-                <span class="font-medium text-gray-700">เปิดแสดงป็อปอัพให้ลูกค้าเห็น</span>
+        <div id="adminDashboard" class="hidden p-4 sm:p-5 space-y-4 overflow-y-auto flex-1">
+            <div class="flex items-center justify-between bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+                <span class="font-medium text-gray-700 text-sm">เปิดแสดงป็อปอัพให้ลูกค้าเห็น</span>
                 <label class="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" id="popupActiveToggle" class="sr-only peer">
                     <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00B900]"></div>
                 </label>
             </div>
 
-            <div class="border border-gray-200 p-4 rounded-lg bg-white shadow-sm">
-                <label class="block text-sm font-medium text-gray-700 mb-2">อัปโหลดรูปภาพใหม่ (จะถูกย่อขนาดให้อัตโนมัติ)</label>
-                <input type="file" id="popupImageUpload" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
-                
-                <div class="mt-4 border border-dashed border-gray-300 rounded-lg p-2 bg-gray-50 relative min-h-[150px] flex items-center justify-center overflow-hidden">
-                    <p id="noImageText" class="text-sm text-gray-400 absolute">ยังไม่มีรูปภาพป็อปอัพ</p>
-                    <img id="adminImagePreview" src="" class="w-full h-auto max-h-48 object-contain rounded hidden relative z-10">
+            <div class="border border-gray-100 p-3 rounded-xl bg-white shadow-sm">
+                <label class="block text-xs font-medium text-gray-700 mb-2">อัปโหลดรูปภาพป็อปอัพ</label>
+                <input type="file" id="popupImageUpload" accept="image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer transition-colors">
+                <div class="mt-2 border border-dashed border-gray-300 rounded-xl p-2 bg-gray-50 relative min-h-[100px] flex items-center justify-center overflow-hidden">
+                    <p id="noImageText" class="text-xs text-gray-400 absolute">ยังไม่มีรูปภาพป็อปอัพ</p>
+                    <img id="adminImagePreview" src="" class="w-full h-auto max-h-24 object-contain rounded-lg hidden relative z-10">
                 </div>
             </div>
 
-            <button id="savePopupBtn" class="w-full bg-blue-600 text-white py-3.5 rounded-lg font-medium hover:bg-blue-700 transition-colors flex justify-center items-center shadow-lg">
-                บันทึกการตั้งค่าป็อปอัพ
+            <div class="border border-gray-100 p-3 rounded-xl bg-white shadow-sm">
+                <label class="block text-xs font-medium text-gray-700 mb-2">อัปโหลดรูปภาพหน้าปกโครงการ</label>
+                <input type="file" id="headerImageUpload" accept="image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer transition-colors">
+                <div class="mt-2 border border-dashed border-gray-300 rounded-xl p-2 bg-gray-50 relative min-h-[80px] flex items-center justify-center overflow-hidden">
+                    <p id="noHeaderImageText" class="text-xs text-gray-400 absolute">ใช้รูปภาพเริ่มต้น</p>
+                    <img id="adminHeaderImagePreview" src="" class="w-full h-auto max-h-20 object-cover rounded-lg hidden relative z-10">
+                </div>
+            </div>
+
+            <div class="border border-gray-100 p-3 rounded-xl bg-white shadow-sm">
+                <label class="block text-xs font-medium text-gray-700 mb-2">อัปโหลดรูปภาพพื้นหลังเว็บ</label>
+                <input type="file" id="bgImageUpload" accept="image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer transition-colors">
+                <div class="mt-2 border border-dashed border-gray-300 rounded-xl p-2 bg-gray-50 relative min-h-[80px] flex items-center justify-center overflow-hidden">
+                    <p id="noBgImageText" class="text-xs text-gray-400 absolute">ใช้รูปภาพเริ่มต้น</p>
+                    <img id="adminBgImagePreview" src="" class="w-full h-auto max-h-20 object-cover rounded-lg hidden relative z-10 opacity-50">
+                </div>
+            </div>
+
+            <button id="savePopupBtn" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all shadow-md">
+                บันทึกการตั้งค่า
             </button>
-            <div class="text-center">
-                <button id="logoutAdminBtn" class="text-red-500 text-sm hover:underline mt-2">ออกจากระบบหลังบ้าน</button>
+            <div class="text-center pt-1 pb-2">
+                <button id="logoutAdminBtn" class="text-red-500 text-xs font-medium hover:text-red-700 transition-colors">ออกจากระบบหลังบ้าน</button>
             </div>
         </div>
     </div>
 
     <!-- Container สำหรับลูกค้า -->
-    <div id="mainView" class="glass-effect w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+    <!-- ปรับความสูงรวมให้อยู่ในกรอบ 95dvh ให้พอดีจอที่สุด -->
+    <div id="mainView" class="glass-effect w-full max-w-md rounded-[1.5rem] overflow-hidden flex flex-col shadow-2xl max-h-[92dvh]">
         
-        <!-- Header Image -->
-        <div class="h-40 bg-blue-600 relative flex items-center justify-center">
-            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" alt="House" class="absolute inset-0 w-full h-full object-cover opacity-60">
-            <div class="relative z-10 text-center px-4">
-                <h1 class="text-2xl font-bold text-white drop-shadow-md">โครงการบ้านจัดสรร</h1>
-                <p class="text-blue-100 text-sm mt-1 drop-shadow">ลงทะเบียนรับข้อมูลและโปรโมชั่นพิเศษ</p>
-            </div>
+        <!-- Header Text (กระชับพื้นที่) -->
+        <div class="pt-5 pb-3 px-6 text-center bg-white/95 border-b border-gray-100 relative shrink-0">
+            <h1 class="text-xl md:text-2xl font-bold text-gray-800 tracking-tight">โครงการบ้านจัดสรร</h1>
+            <p class="text-blue-600 font-medium text-xs md:text-sm mt-1">ลงทะเบียนรับข้อมูลและโปรโมชั่นพิเศษ</p>
+            <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-blue-500 rounded-t-md"></div>
+        </div>
+
+        <!-- Header Image (ลดความสูงลงนิดหน่อยให้พอดีจอ) -->
+        <div class="h-24 sm:h-32 bg-gray-200 relative w-full overflow-hidden shrink-0">
+            <img id="mainHeaderImage" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" alt="House" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none"></div>
         </div>
 
         <!-- Form Section -->
-        <div class="p-6 md:p-8">
-            <form id="leadForm" class="space-y-5">
+        <div class="p-5 bg-white/60 flex-1 overflow-y-auto">
+            <form id="leadForm" class="space-y-3.5">
                 
-                <!-- ชื่อ-นามสกุล -->
                 <div>
-                    <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">ชื่อ - นามสกุล <span class="text-red-500">*</span></label>
+                    <label for="fullName" class="block text-[13px] font-semibold text-gray-700 mb-1 ml-1">ชื่อ - นามสกุล <span class="text-red-500">*</span></label>
                     <input type="text" id="fullName" required placeholder="กรอกชื่อของคุณ" 
-                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white/90 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all shadow-sm text-sm">
                 </div>
 
-                <!-- เบอร์โทรศัพท์ -->
                 <div>
-                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์ <span class="text-red-500">*</span></label>
+                    <label for="phone" class="block text-[13px] font-semibold text-gray-700 mb-1 ml-1">เบอร์โทรศัพท์ <span class="text-red-500">*</span></label>
                     <input type="tel" id="phone" required placeholder="08X-XXX-XXXX" pattern="[0-9]{10}"
-                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
-                    <p class="text-xs text-gray-500 mt-1">กรอกตัวเลข 10 หลัก ติดกัน</p>
+                        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white/90 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all shadow-sm text-sm">
                 </div>
 
-                <!-- สาขาร้านกาแฟ (ตัวนี้จะถูกซ่อนอัตโนมัติหากเข้าจากลิงก์ร้านกาแฟ) -->
                 <div id="shopFieldContainer">
-                    <label for="shopName" class="block text-sm font-medium text-gray-700 mb-1">คุณสแกน QR Code จากที่ไหน? <span class="text-red-500">*</span></label>
+                    <label for="shopName" class="block text-[13px] font-semibold text-gray-700 mb-1 ml-1">คุณสแกน QR Code จากที่ไหน? <span class="text-red-500">*</span></label>
                     <select id="shopName" required
-                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white">
+                        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white/90 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all shadow-sm text-sm appearance-none">
                         <option value="" disabled selected>-- กรุณาเลือก --</option>
                         <option value="ปัด • จุ • บัน Van Coffee Shop">ร้าน ปัด • จุ • บัน Van Coffee Shop</option>
                         <option value="อื่นๆ (แผ่นพับ, ใบปลิว, นามบัตร)">อื่นๆ (แผ่นพับ, ใบปลิว, นามบัตร)</option>
                     </select>
                 </div>
 
-                <!-- ปุ่ม Submit -->
                 <button type="submit" id="submitBtn"
-                    class="w-full bg-[#00B900] hover:bg-[#009900] text-white font-medium py-3.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-green-200 mt-4">
-                    <svg viewBox="0 0 24 24" class="w-6 h-6 fill-current">
+                    class="btn-hover-effect w-full bg-gradient-to-r from-[#00c300] to-[#009900] text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg mt-4 text-sm sm:text-base">
+                    <svg viewBox="0 0 24 24" class="w-5 h-5 fill-current">
                         <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.846 10.036 9.608.391.084.922.258 1.057.592.114.281.072.717.035.997l-.239 1.428c-.066.411-.318 1.559 1.365.849 1.684-.71 9.098-5.36 10.973-8.816 1.033-1.895 1.488-3.715 1.488-5.264zm-15.08 2.809h-3.356c-.347 0-.629-.283-.629-.629v-5.201c0-.347.282-.629.629-.629.346 0 .628.282.628.629v4.572h2.728c.347 0 .628.282.628.629 0 .347-.281.629-.628.629zm2.083 0c-.346 0-.628-.282-.628-.629v-5.201c0-.347.282-.629.628-.629.347 0 .629.282.629.629v5.201c0 .347-.282.629-.629.629zm5.341-2.836c0 .346-.282.629-.629.629h-1.631v1.578h1.631c.347 0 .629.283.629.629 0 .347-.282.629-.629.629h-2.261c-.346 0-.628-.282-.628-.629v-5.201c0-.347.282-.629.628-.629h2.261c.347 0 .629.282.629.629 0 .347-.282.629-.629.629h-1.631v1.444h1.631c.347 0 .629.282.629.629zm4.276 2.836c-.161 0-.322-.061-.444-.183l-2.486-2.485v2.039c0 .347-.282.629-.629.629-.346 0-.628-.282-.628-.629v-5.201c0-.347.282-.629.628-.629.162 0 .323.06.444.183l2.485 2.484v-2.038c0-.347.282-.629.629-.629.346 0 .628.282.628.629v5.201c0 .347-.282.629-.628.629z"/>
                     </svg>
                     รับข้อมูลและคุยผ่าน LINE
@@ -130,14 +184,15 @@
             </form>
         </div>
         
-        <div id="loadingOverlay" class="hidden absolute inset-0 bg-white/90 z-50 flex flex-col items-center justify-center">
-            <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-            <p class="mt-4 text-gray-700 font-medium">กำลังพาท่านไปที่ LINE...</p>
+        <div id="loadingOverlay" class="hidden absolute inset-0 bg-white/95 backdrop-blur-sm z-50 flex flex-col items-center justify-center rounded-[1.5rem]">
+            <div class="w-12 h-12 border-4 border-[#00B900]/20 border-t-[#00B900] rounded-full animate-spin"></div>
+            <p class="mt-4 text-gray-800 font-semibold text-sm">กำลังพาท่านไปที่ LINE...</p>
         </div>
     </div>
 
-    <div class="mt-6 text-center">
-        <p class="text-gray-400 text-xs">ข้อมูลของท่านจะถูกเก็บเป็นความลับ</p>
+    <!-- ย้ายขึ้นมานิดหน่อยให้ไม่โดนขอบจอบัง -->
+    <div class="mt-3 sm:mt-4 shrink-0 text-center bg-white/40 px-5 py-1.5 rounded-full backdrop-blur-sm shadow-sm border border-white/50">
+        <p class="text-gray-600 text-[11px] sm:text-xs font-medium">ข้อมูลของท่านจะถูกเก็บเป็นความลับอย่างปลอดภัย</p>
     </div>
 
     <script type="module">
@@ -145,12 +200,12 @@
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // ลิงก์ LINE OA ของคุณ (@SURE141)
+        // ลิงก์ LINE OA
         const LINE_URL = "https://line.me/R/ti/p/@SURE141"; 
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcuLvRe4ggE9kJuckF-FYKAw4IJ7IVjr92XOZsNCZ0yV2fGNZ6RLdsqku0zaTk3nSm/exec";
 
         // ==========================================
-        // 1. นำค่า Firebase Config ของคุณมาใส่ตรงนี้
+        // Firebase Config ของคุณ
         // ==========================================
         const YOUR_FIREBASE_CONFIG = {
             apiKey: "AIzaSyAm3UhBeh1eli5pqwj5M2psXy1BnpQUI-Y",
@@ -176,9 +231,40 @@
         let currentPopupData = null; 
         let isPopupShowing = false;
 
+        // ฟังก์ชันตรวจสอบว่าควรแสดง Popup หรือไม่ (เช็ค 24 ชั่วโมง)
+        function shouldShowPopup() {
+            const hiddenUntil = localStorage.getItem('hidePopupUntil');
+            if (hiddenUntil) {
+                if (Date.now() < parseInt(hiddenUntil, 10)) {
+                    return false; // ยังไม่ครบ 24 ชม. ไม่ต้องแสดง
+                } else {
+                    localStorage.removeItem('hidePopupUntil'); // หมดเวลาแล้ว ลบทิ้ง
+                }
+            }
+            return true;
+        }
+
         const mainView = document.getElementById('mainView');
         const adminView = document.getElementById('adminView');
         const popupModal = document.getElementById('popupModal');
+
+        // สคริปต์สลับเปิดปิดตา (ซ่อน/แสดงรหัสผ่าน)
+        const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+        const adminPasswordInput = document.getElementById('adminPassword');
+        const eyeOpenIcon = document.getElementById('eyeOpenIcon');
+        const eyeClosedIcon = document.getElementById('eyeClosedIcon');
+
+        togglePasswordBtn.addEventListener('click', () => {
+            if (adminPasswordInput.type === 'password') {
+                adminPasswordInput.type = 'text';
+                eyeOpenIcon.classList.add('hidden');
+                eyeClosedIcon.classList.remove('hidden');
+            } else {
+                adminPasswordInput.type = 'password';
+                eyeOpenIcon.classList.remove('hidden');
+                eyeClosedIcon.classList.add('hidden');
+            }
+        });
 
         document.getElementById('openAdminBtn').addEventListener('click', () => {
             mainView.classList.add('hidden');
@@ -189,8 +275,12 @@
             adminView.classList.add('hidden');
             mainView.classList.remove('hidden');
             document.getElementById('adminPassword').value = '';
+            adminPasswordInput.type = 'password'; // รีเซ็ตตาให้กลับไปซ่อนเหมือนเดิม
+            eyeOpenIcon.classList.remove('hidden');
+            eyeClosedIcon.classList.add('hidden');
             
-            if (currentPopupData && currentPopupData.isActive && currentPopupData.imageUrl) {
+            if (currentPopupData && currentPopupData.isActive && currentPopupData.imageUrl && shouldShowPopup()) {
+                document.getElementById('hidePopup24h').checked = false; // เคลียร์ช่องติ๊กเมื่อโชว์ขึ้นมาใหม่
                 document.getElementById('popupImage').src = currentPopupData.imageUrl;
                 popupModal.classList.remove('hidden');
                 isPopupShowing = true;
@@ -210,14 +300,24 @@
             document.getElementById('adminDashboard').classList.add('hidden');
             document.getElementById('adminLoginForm').classList.remove('hidden');
             document.getElementById('adminPassword').value = '';
+            adminPasswordInput.type = 'password'; 
+            eyeOpenIcon.classList.remove('hidden');
+            eyeClosedIcon.classList.add('hidden');
         });
 
         document.getElementById('closePopupBtn').addEventListener('click', () => {
             popupModal.classList.add('hidden');
+            isPopupShowing = false;
+            
+            // ถ้าติ๊กกล่องให้ซ่อน 24 ชม. ให้บันทึกเวลาปัจจุบัน + 24 ชม.
+            if (document.getElementById('hidePopup24h').checked) {
+                const hideUntil = Date.now() + (24 * 60 * 60 * 1000); 
+                localStorage.setItem('hidePopupUntil', hideUntil);
+            }
         });
 
         // ==========================================
-        // ระบบจัดการป็อปอัพ (หลังบ้าน) ด้วยฐานข้อมูล
+        // ระบบจัดการป็อปอัพและรูปภาพ
         // ==========================================
         let currentUser = null;
         let db = null;
@@ -272,60 +372,94 @@
                     currentPopupData = data; 
                     
                     document.getElementById('popupActiveToggle').checked = data.isActive === true;
+                    
                     if (data.imageUrl) {
                         document.getElementById('adminImagePreview').src = data.imageUrl;
                         document.getElementById('adminImagePreview').classList.remove('hidden');
                         document.getElementById('noImageText').classList.add('hidden');
                         
-                        if (data.isActive && adminView.classList.contains('hidden') && !isPopupShowing) {
+                        if (data.isActive && adminView.classList.contains('hidden') && !isPopupShowing && shouldShowPopup()) {
+                            document.getElementById('hidePopup24h').checked = false;
                             document.getElementById('popupImage').src = data.imageUrl;
                             popupModal.classList.remove('hidden');
                             isPopupShowing = true;
                         }
                     }
+
+                    if (data.headerImageUrl) {
+                        document.getElementById('mainHeaderImage').src = data.headerImageUrl;
+                        document.getElementById('adminHeaderImagePreview').src = data.headerImageUrl;
+                        document.getElementById('adminHeaderImagePreview').classList.remove('hidden');
+                        document.getElementById('noHeaderImageText').classList.add('hidden');
+                    }
+
+                    if (data.bgImageUrl) {
+                        document.getElementById('pageBackgroundImage').src = data.bgImageUrl;
+                        document.getElementById('adminBgImagePreview').src = data.bgImageUrl;
+                        document.getElementById('adminBgImagePreview').classList.remove('hidden');
+                        document.getElementById('noBgImageText').classList.add('hidden');
+                    }
                 }
             }, (error) => {
                 console.error("Snapshot Error: ", error);
-                if (error.code === 'permission-denied') {
-                    // แจ้งเตือนถ้าผู้ใช้ลืมตั้งค่า Rules ของ Firebase
-                    console.warn("⚠️ แจ้งเตือน: คุณยังไม่ได้เปิดสิทธิ์ (Rules) ใน Firebase");
-                }
+            });
+        }
+
+        function handleImageUpload(inputId, previewId, placeholderId, callback, maxWidth = 800) {
+            document.getElementById(inputId).addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let w = img.width, h = img.height;
+                        if (w > maxWidth) { h = Math.round((h * maxWidth) / w); w = maxWidth; }
+                        canvas.width = w; canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, w, h);
+                        
+                        const base64 = canvas.toDataURL('image/webp', 0.8);
+                        document.getElementById(previewId).src = base64;
+                        document.getElementById(previewId).classList.remove('hidden');
+                        document.getElementById(placeholderId).classList.add('hidden');
+                        callback(base64);
+                    };
+                };
             });
         }
 
         let uploadedBase64 = null;
-        document.getElementById('popupImageUpload').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
+        let uploadedHeaderBase64 = null;
+        let uploadedBgBase64 = null;
 
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = (event) => {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 800;
-                    let w = img.width, h = img.height;
-                    if (w > MAX_WIDTH) { h = Math.round((h * MAX_WIDTH) / w); w = MAX_WIDTH; }
-                    canvas.width = w; canvas.height = h;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, w, h);
-                    
-                    uploadedBase64 = canvas.toDataURL('image/webp', 0.8);
-                    
-                    document.getElementById('adminImagePreview').src = uploadedBase64;
-                    document.getElementById('adminImagePreview').classList.remove('hidden');
-                    document.getElementById('noImageText').classList.add('hidden');
-                };
-            };
-        });
+        handleImageUpload('popupImageUpload', 'adminImagePreview', 'noImageText', (base64) => uploadedBase64 = base64, 800);
+        handleImageUpload('headerImageUpload', 'adminHeaderImagePreview', 'noHeaderImageText', (base64) => {
+            uploadedHeaderBase64 = base64;
+            document.getElementById('mainHeaderImage').src = base64; 
+        }, 1000);
+        handleImageUpload('bgImageUpload', 'adminBgImagePreview', 'noBgImageText', (base64) => {
+            uploadedBgBase64 = base64;
+            document.getElementById('pageBackgroundImage').src = base64; 
+        }, 1200);
 
         document.getElementById('savePopupBtn').addEventListener('click', async () => {
-            if (!db) return alert("ไม่สามารถบันทึกได้! กรุณาตั้งค่า Firebase Config ให้เรียบร้อยก่อน");
+            if (!db) return alert("ไม่สามารถบันทึกได้! กรุณาตั้งค่า Firebase Config");
             if (!currentUser) return alert("กำลังเชื่อมต่อระบบ กรุณารอสักครู่");
+            
             const btn = document.getElementById('savePopupBtn');
-            btn.innerHTML = "กำลังบันทึก...";
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                กำลังบันทึก...
+            `;
             
             try {
                 const docRef = doc(db, ...dbPath);
@@ -333,32 +467,32 @@
                     isActive: document.getElementById('popupActiveToggle').checked 
                 };
                 
-                if (uploadedBase64) {
-                    dataToSave.imageUrl = uploadedBase64;
-                } else if (document.getElementById('adminImagePreview').src) {
-                    dataToSave.imageUrl = document.getElementById('adminImagePreview').src;
-                }
+                if (uploadedBase64) dataToSave.imageUrl = uploadedBase64;
+                else if (currentPopupData && currentPopupData.imageUrl) dataToSave.imageUrl = currentPopupData.imageUrl;
+
+                if (uploadedHeaderBase64) dataToSave.headerImageUrl = uploadedHeaderBase64;
+                else if (currentPopupData && currentPopupData.headerImageUrl) dataToSave.headerImageUrl = currentPopupData.headerImageUrl;
+
+                if (uploadedBgBase64) dataToSave.bgImageUrl = uploadedBgBase64;
+                else if (currentPopupData && currentPopupData.bgImageUrl) dataToSave.bgImageUrl = currentPopupData.bgImageUrl;
 
                 await setDoc(docRef, dataToSave, { merge: true });
-                alert("บันทึกการตั้งค่าป็อปอัพเรียบร้อย!\n(กดปุ่ม 'ปิดหน้าต่างนี้' เพื่อดูตัวอย่าง Popup)");
+                alert("บันทึกการตั้งค่าเรียบร้อย!\n(กดปุ่ม 'ปิดหน้าต่างนี้' เพื่อดูตัวอย่าง)");
             } catch (error) {
                 console.error("Save Error: ", error);
-                
-                // แจ้งเตือนวิธีแก้ปัญหาโดยตรงให้ผู้ใช้
                 if (error.code === 'permission-denied') {
-                    alert("⚠️ บันทึกไม่สำเร็จ: ติดระบบรักษาความปลอดภัยของ Firebase (Permission Denied)\n\nวิธีแก้ไข:\n1. ไปที่เว็บไซต์ Firebase Console\n2. เลือกโปรเจกต์ของคุณ\n3. ไปที่เมนู 'Firestore Database'\n4. เลือกแท็บ 'Rules'\n5. เปลี่ยนโค้ดตรงกลางเป็น allow read, write: if true;\n6. กด Publish");
+                    alert("⚠️ บันทึกไม่สำเร็จ: ติดระบบรักษาความปลอดภัยของ Firebase\nกรุณาตั้งค่า Rules ให้เป็น allow read, write: if true;");
                 } else {
                     alert("เกิดข้อผิดพลาดในการบันทึก กรุณาลองใหม่อีกครั้ง");
                 }
             } finally {
-                btn.innerHTML = "บันทึกการตั้งค่าป็อปอัพ";
+                btn.innerHTML = originalText;
             }
         });
 
         // ==========================================
         // ส่วนจัดการฟอร์มลงทะเบียนลูกค้า
         // ==========================================
-
         document.getElementById('leadForm').addEventListener('submit', async (e) => {
             e.preventDefault(); 
 
@@ -381,9 +515,7 @@
                     body: formData,
                     mode: 'no-cors' 
                 });
-
                 window.location.href = LINE_URL;
-
             } catch (error) {
                 console.error("Error: ", error);
                 window.location.href = LINE_URL; 
