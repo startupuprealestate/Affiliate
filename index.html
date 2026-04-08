@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ลงทะเบียนรับสิทธิพิเศษ</title>
+    <title>ลงทะเบียนรับสิทธิพิเศษ - โครงการบ้าน</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -25,11 +25,26 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 25px -5px rgba(0, 185, 0, 0.4);
         }
+        /* Custom Scrollbar for FGF */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
     </style>
 </head>
 <body class="h-[100dvh] w-screen flex flex-col items-center justify-center p-3 sm:p-4 relative overflow-hidden">
 
-    <!-- พื้นหลังเว็บไซต์ (ซ่อนเริ่มต้นด้วย opacity-0 และค่อยๆ เฟดอินเมื่อโหลดเสร็จ) -->
+    <!-- พื้นหลังเว็บไซต์ -->
     <div class="fixed inset-0 z-[-10] bg-blue-50/50">
         <img id="pageBackgroundImage" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Background" class="w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out">
     </div>
@@ -59,7 +74,7 @@
     <div id="adminView" class="hidden glass-effect w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative z-50 flex flex-col max-h-[90dvh]">
         <div class="bg-gray-800 p-3 sm:p-4 text-white text-center font-bold text-base sm:text-lg flex justify-between items-center shrink-0">
             <span class="flex items-center gap-2">
-                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
                 ระบบหลังบ้าน
             </span>
             <button id="backToHomeBtn" class="text-xs font-medium text-gray-200 hover:text-white bg-gray-700 px-3 py-1.5 rounded-lg transition-colors">ปิดหน้าต่างนี้</button>
@@ -67,7 +82,6 @@
         
         <div id="adminLoginForm" class="p-6 sm:p-8 flex-1 flex flex-col justify-center">
             <p class="mb-4 text-sm text-gray-600 text-center">กรุณาใส่รหัสผ่านเพื่อเข้าสู่ระบบ</p>
-            
             <div class="relative mb-5">
                 <input type="password" id="adminPassword" placeholder="รหัสผ่าน" class="w-full px-5 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-center tracking-widest text-lg bg-white/80 pr-12">
                 <button type="button" id="togglePasswordBtn" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
@@ -75,11 +89,30 @@
                     <svg id="eyeClosedIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
                 </button>
             </div>
-
             <button id="loginAdminBtn" class="w-full bg-gray-800 text-white py-3 rounded-xl font-medium hover:bg-gray-900 transition-colors shadow-md">เข้าสู่ระบบ</button>
         </div>
 
-        <div id="adminDashboard" class="hidden p-4 sm:p-5 space-y-4 overflow-y-auto flex-1">
+        <div id="adminDashboard" class="hidden p-4 sm:p-5 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
+            
+            <!-- ส่วนจัดการ Friend Get Friend -->
+            <div class="border border-[#D4AF37]/50 p-4 rounded-xl bg-[#0B3D1B]/5 shadow-sm">
+                <h3 class="font-bold text-[#0B3D1B] mb-2 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    ระบบ Friend Get Friend
+                </h3>
+                <p class="text-xs text-gray-600 mb-3">ลูกค้าทั่วไปจะไม่เห็นหน้านี้ คุณสามารถก๊อปปี้ลิงก์ส่งให้ลูกค้าที่ต้องการได้โดยตรง</p>
+                <div class="flex gap-2">
+                    <button id="copyFgfLinkBtn" class="flex-1 bg-white border border-[#0B3D1B] text-[#0B3D1B] py-2 px-2 rounded-lg text-xs font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        คัดลอกลิงก์
+                    </button>
+                    <button id="previewFgfBtn" class="flex-1 bg-[#0B3D1B] text-white py-2 px-2 rounded-lg text-xs font-medium hover:bg-[#082a13] transition-colors flex items-center justify-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        ดูหน้าฟอร์ม
+                    </button>
+                </div>
+            </div>
+
             <div class="flex items-center justify-between bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
                 <span class="font-medium text-gray-700 text-sm">เปิดแสดงป็อปอัพให้ลูกค้าเห็น</span>
                 <label class="relative inline-flex items-center cursor-pointer">
@@ -124,35 +157,30 @@
         </div>
     </div>
 
-    <!-- Container สำหรับลูกค้า -->
-    <div id="mainView" class="glass-effect w-full max-w-md rounded-[1.5rem] overflow-hidden flex flex-col shadow-2xl max-h-[92dvh]">
-        
+    <!-- Container สำหรับลูกค้าทั่วไป (ฟอร์มลงทะเบียนปกติ) -->
+    <div id="mainView" class="hidden glass-effect w-full max-w-md rounded-[1.5rem] overflow-hidden flex flex-col shadow-2xl max-h-[92dvh]">
         <div class="pt-5 pb-3 px-6 text-center bg-white/95 border-b border-gray-100 relative shrink-0">
             <h1 class="text-xl md:text-2xl font-bold text-[#0B3D1B] tracking-tight">ลงทะเบียน</h1>
             <p class="text-[#0B3D1B] font-medium text-xs md:text-sm mt-1">รับข้อมูลและโปรโมชั่นพิเศษ</p>
         </div>
 
-        <!-- Header Image (ซ่อนเริ่มต้นด้วย opacity-0 และค่อยๆ เฟดอินเมื่อโหลดเสร็จ) -->
         <div class="h-24 sm:h-32 bg-gray-200 relative w-full overflow-hidden shrink-0">
             <img id="mainHeaderImage" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="House" class="w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out">
             <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none"></div>
         </div>
 
-        <div class="p-5 bg-white/60 flex-1 overflow-y-auto">
+        <div class="p-5 bg-white/60 flex-1 overflow-y-auto custom-scrollbar">
             <form id="leadForm" class="space-y-3.5">
-                
                 <div>
                     <label for="fullName" class="block text-[13px] font-semibold text-gray-700 mb-1 ml-1">ชื่อ - นามสกุล หรือ ชื่อเล่น <span class="text-red-500">*</span></label>
                     <input type="text" id="fullName" required placeholder="กรอกชื่อของคุณ" 
                         class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white/90 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all shadow-sm text-sm">
                 </div>
-
                 <div>
                     <label for="phone" class="block text-[13px] font-semibold text-gray-700 mb-1 ml-1">เบอร์โทรศัพท์ <span class="text-red-500">*</span></label>
                     <input type="tel" id="phone" required placeholder="08X-XXX-XXXX" pattern="[0-9]{10}"
                         class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white/90 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all shadow-sm text-sm">
                 </div>
-
                 <div id="shopFieldContainer">
                     <label for="shopName" class="block text-[13px] font-semibold text-gray-700 mb-1 ml-1">คุณสแกน QR Code จากที่ไหน? <span class="text-red-500">*</span></label>
                     <select id="shopName" required
@@ -162,9 +190,7 @@
                         <option value="อื่นๆ (แผ่นพับ, ใบปลิว, นามบัตร)">อื่นๆ (แผ่นพับ, ใบปลิว, นามบัตร)</option>
                     </select>
                 </div>
-
-                <button type="submit" id="submitBtn"
-                    class="btn-hover-effect w-full bg-gradient-to-r from-[#00c300] to-[#009900] text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg mt-4 text-sm sm:text-base">
+                <button type="submit" id="submitBtn" class="btn-hover-effect w-full bg-gradient-to-r from-[#00c300] to-[#009900] text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg mt-4 text-sm sm:text-base">
                     <svg viewBox="0 0 24 24" class="w-5 h-5 fill-current">
                         <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.846 10.036 9.608.391.084.922.258 1.057.592.114.281.072.717.035.997l-.239 1.428c-.066.411-.318 1.559 1.365.849 1.684-.71 9.098-5.36 10.973-8.816 1.033-1.895 1.488-3.715 1.488-5.264zm-15.08 2.809h-3.356c-.347 0-.629-.283-.629-.629v-5.201c0-.347.282-.629.629-.629.346 0 .628.282.628.629v4.572h2.728c.347 0 .628.282.628.629 0 .347-.281.629-.628.629zm2.083 0c-.346 0-.628-.282-.628-.629v-5.201c0-.347.282-.629.628-.629.347 0 .629.282.629.629v5.201c0 .347-.282.629-.629.629zm5.341-2.836c0 .346-.282.629-.629.629h-1.631v1.578h1.631c.347 0 .629.283.629.629 0 .347-.282.629-.629.629h-2.261c-.346 0-.628-.282-.628-.629v-5.201c0-.347.282-.629.628-.629h2.261c.347 0 .629.282.629.629 0 .347-.282.629-.629.629h-1.631v1.444h1.631c.347 0 .629.282.629.629zm4.276 2.836c-.161 0-.322-.061-.444-.183l-2.486-2.485v2.039c0 .347-.282.629-.629.629-.346 0-.628-.282-.628-.629v-5.201c0-.347.282-.629.628-.629.162 0 .323.06.444.183l2.485 2.484v-2.038c0-.347.282-.629.629-.629.346 0 .628.282.628.629v5.201c0 .347-.282.629-.628.629z"/>
                     </svg>
@@ -172,11 +198,159 @@
                 </button>
             </form>
         </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- Container สำหรับ Friend Get Friend (ซ่อนไว้ จะโชว์เมื่อมี ?mode=fgf ใน URL) -->
+    <!-- ========================================================================= -->
+    <div id="fgfView" class="hidden glass-effect w-full max-w-md rounded-[1.5rem] overflow-hidden flex flex-col shadow-2xl max-h-[95dvh] bg-white">
+        <!-- Header Ribbon -->
+        <div class="h-3 w-full bg-[#D4AF37] shrink-0"></div>
         
-        <div id="loadingOverlay" class="hidden absolute inset-0 bg-white/95 backdrop-blur-sm z-50 flex flex-col items-center justify-center rounded-[1.5rem]">
-            <div class="w-12 h-12 border-4 border-[#00B900]/20 border-t-[#00B900] rounded-full animate-spin"></div>
-            <p class="mt-4 text-gray-800 font-semibold text-sm">กำลังพาท่านไปที่ LINE...</p>
+        <div class="p-5 sm:p-6 flex-1 flex flex-col overflow-y-auto custom-scrollbar">
+            
+            <div id="fgfFormArea" class="flex-1 flex flex-col">
+                <div class="text-center mb-5 shrink-0">
+                    <h1 class="text-xl font-bold text-[#0B3D1B] mb-1">Startup Up Real Estate</h1>
+                    <p class="text-xs text-gray-500">แบบฟอร์มแนะนำลูกค้าโครงการ</p>
+                </div>
+
+                <!-- Stepper -->
+                <div class="flex items-center justify-center mb-6 shrink-0">
+                    <div id="stepCir1" class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-[#0B3D1B] text-white border-[#0B3D1B] transition-colors duration-300">1</div>
+                    <div id="stepLine1" class="w-10 h-1 bg-gray-200 transition-colors duration-300"></div>
+                    <div id="stepCir2" class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-white text-gray-400 border-gray-300 transition-colors duration-300">2</div>
+                    <div id="stepLine2" class="w-10 h-1 bg-gray-200 transition-colors duration-300"></div>
+                    <div id="stepCir3" class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-white text-gray-400 border-gray-300 transition-colors duration-300">3</div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto custom-scrollbar pr-1">
+                    <!-- Step 1 -->
+                    <div id="fgfStep1" class="space-y-4 animate-[fadeIn_0.3s_ease-out]">
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 text-xs sm:text-[13px] text-gray-700 leading-relaxed h-40 overflow-y-auto custom-scrollbar">
+                            <h3 class="font-bold text-[#0B3D1B] mb-2 text-sm sticky top-0 bg-gray-50 pb-1">เงื่อนไขการแนะนำ</h3>
+                            <ul class="list-disc pl-5 space-y-1.5">
+                                <li>ผู้แนะนำต้องกรอกข้อมูลให้ครบถ้วนและเป็นความจริง</li>
+                                <li>สิทธิประโยชน์จะได้รับเมื่อผู้ถูกแนะนำทำการจองและทำสัญญาเสร็จสิ้น</li>
+                                <li>บริษัทขอสงวนสิทธิ์ในการเปลี่ยนแปลงเงื่อนไขโดยไม่ต้องแจ้งให้ทราบ</li>
+                                <li>ข้อมูลของท่านจะถูกเก็บเป็นความลับและใช้เพื่อการติดต่อเท่านั้น</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">อีเมลของคุณ <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                </div>
+                                <input type="email" id="fgfEmail" placeholder="example@gmail.com" class="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]">
+                            </div>
+                            <p id="errEmail" class="text-red-500 text-xs mt-1 hidden"></p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div id="fgfStep2" class="hidden space-y-3.5 animate-[fadeIn_0.3s_ease-out]">
+                        <h2 class="text-base font-bold text-[#0B3D1B] border-b pb-1 mb-2 border-[#D4AF37]/30">ข้อมูลผู้แนะนำ (ตัวคุณ)</h2>
+                        <div>
+                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">ชื่อ-นามสกุล <span class="text-red-500">*</span></label>
+                            <input type="text" id="fgfRefName" class="w-full p-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" placeholder="นาย/นาง/นางสาว...">
+                            <p id="errRefName" class="text-red-500 text-xs mt-1 hidden"></p>
+                        </div>
+                        <div>
+                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">เบอร์ติดต่อ <span class="text-red-500">*</span> <span class="text-xs text-gray-400 font-normal">(10 หลัก)</span></label>
+                            <input type="tel" id="fgfRefPhone" class="w-full p-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" placeholder="08X-XXX-XXXX" maxlength="10">
+                            <p id="errRefPhone" class="text-red-500 text-xs mt-1 hidden"></p>
+                        </div>
+                        <div>
+                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">สถานะ <span class="text-red-500">*</span></label>
+                            <select id="fgfRefStatus" class="w-full p-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37] bg-white">
+                                <option value="">-- เลือกสถานะ --</option>
+                                <option value="ลูกค้าของ Startup Up Real Estate">ลูกค้าของ Startup Up Real Estate</option>
+                                <option value="บุคคลทั่วไป">บุคคลทั่วไป</option>
+                            </select>
+                            <p id="errRefStatus" class="text-red-500 text-xs mt-1 hidden"></p>
+                        </div>
+                        <div id="fgfSalesArea" class="hidden bg-[#0B3D1B]/5 p-3 rounded-xl border border-[#0B3D1B]/10 mt-2 space-y-3">
+                            <div>
+                                <label class="block text-[13px] font-semibold text-[#0B3D1B] mb-1">เซลล์ที่ดูแลท่าน <span class="text-red-500">*</span></label>
+                                <select id="fgfSalesName" class="w-full p-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37] bg-white">
+                                    <option value="">-- เลือกเซลล์ --</option>
+                                    <option value="เซลล์เมย์">เซลล์เมย์</option>
+                                    <option value="เซลล์บูม">เซลล์บูม</option>
+                                    <option value="เซลล์โบ๊ท">เซลล์โบ๊ท</option>
+                                    <option value="อื่นๆ">อื่นๆ</option>
+                                </select>
+                                <p id="errSalesName" class="text-red-500 text-xs mt-1 hidden"></p>
+                            </div>
+                            <div id="fgfSalesOtherArea" class="hidden">
+                                <label class="block text-[13px] font-semibold text-[#0B3D1B] mb-1">โปรดระบุชื่อเซลล์ <span class="text-red-500">*</span></label>
+                                <input type="text" id="fgfSalesOther" class="w-full p-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" placeholder="ระบุชื่อเซลล์...">
+                                <p id="errSalesOther" class="text-red-500 text-xs mt-1 hidden"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div id="fgfStep3" class="hidden space-y-3.5 animate-[fadeIn_0.3s_ease-out]">
+                        <h2 class="text-base font-bold text-[#D4AF37] border-b pb-1 mb-2 border-[#0B3D1B]/30">ข้อมูลเพื่อน/คนรู้จัก</h2>
+                        <div>
+                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">ชื่อ-นามสกุล <span class="text-red-500">*</span></label>
+                            <input type="text" id="fgfTargetName" class="w-full p-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" placeholder="นาย/นาง/นางสาว...">
+                            <p id="errTargetName" class="text-red-500 text-xs mt-1 hidden"></p>
+                        </div>
+                        <div>
+                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">เบอร์ติดต่อ <span class="text-red-500">*</span> <span class="text-xs text-gray-400 font-normal">(10 หลัก)</span></label>
+                            <input type="tel" id="fgfTargetPhone" class="w-full p-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" placeholder="08X-XXX-XXXX" maxlength="10">
+                            <p id="errTargetPhone" class="text-red-500 text-xs mt-1 hidden"></p>
+                        </div>
+                        <div>
+                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">ID LINE <span class="text-red-500">*</span></label>
+                            <input type="text" id="fgfTargetLine" class="w-full p-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" placeholder="ระบุ LINE ID...">
+                            <p id="errTargetLine" class="text-red-500 text-xs mt-1 hidden"></p>
+                        </div>
+                        <div>
+                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">โครงการที่สนใจ <span class="text-red-500">*</span></label>
+                            <input type="text" id="fgfTargetProject" class="w-full p-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" placeholder="ระบุชื่อโครงการ...">
+                            <p id="errTargetProject" class="text-red-500 text-xs mt-1 hidden"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="mt-5 flex gap-2 pt-3 border-t border-gray-100 shrink-0">
+                    <button id="fgfPrevBtn" class="hidden flex-1 py-2.5 px-3 border-2 border-[#0B3D1B] text-[#0B3D1B] rounded-xl font-bold flex items-center justify-center gap-1 hover:bg-[#0B3D1B]/5 transition-colors text-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> ย้อนกลับ
+                    </button>
+                    <button id="fgfNextBtn" class="flex-1 py-2.5 px-3 bg-[#0B3D1B] text-white rounded-xl font-bold flex items-center justify-center gap-1 hover:bg-[#082a13] shadow-md transition-colors text-sm">
+                        ถัดไป <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                    <button id="fgfSubmitBtn" class="hidden flex-1 py-2.5 px-3 bg-gradient-to-r from-[#D4AF37] to-[#C5A059] text-white rounded-xl font-bold flex items-center justify-center gap-1 shadow-md hover:shadow-lg transition-all text-sm">
+                        ส่งข้อมูล
+                    </button>
+                </div>
+            </div>
+
+            <!-- Success Screen -->
+            <div id="fgfSuccessArea" class="hidden flex-1 flex flex-col items-center justify-center py-6 animate-[fadeIn_0.5s_ease-out]">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h2 class="text-xl font-bold text-[#0B3D1B] mb-2">ส่งข้อมูลสำเร็จ!</h2>
+                <p class="text-gray-600 text-sm text-center mb-6 px-4">
+                    ขอบคุณสำหรับการแนะนำลูกค้า ทางทีมงานได้รับข้อมูลเรียบร้อยแล้วและจะติดต่อกลับโดยเร็วที่สุด
+                </p>
+                <button onclick="window.location.reload()" class="py-2.5 px-6 bg-[#0B3D1B] text-white rounded-xl font-bold hover:bg-[#082a13] transition-colors text-sm shadow-md">
+                    ทำรายการใหม่
+                </button>
+            </div>
+
         </div>
+    </div>
+
+    <!-- Loading Overlay กลางจอ -->
+    <div id="loadingOverlay" class="hidden absolute inset-0 bg-white/95 backdrop-blur-sm z-[200] flex flex-col items-center justify-center rounded-[1.5rem]">
+        <div class="w-12 h-12 border-4 border-[#0B3D1B]/20 border-t-[#0B3D1B] rounded-full animate-spin"></div>
+        <p id="loadingText" class="mt-4 text-gray-800 font-semibold text-sm">กำลังดำเนินการ...</p>
     </div>
 
     <div class="mt-3 sm:mt-4 shrink-0 text-center bg-white/40 px-5 py-1.5 rounded-full backdrop-blur-sm shadow-sm border border-white/50">
@@ -203,12 +377,27 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const shopParam = urlParams.get('shop');
+        const modeParam = urlParams.get('mode'); // เช็คโหมด fgf
         let hiddenShopName = null;
 
-        if (shopParam) {
-            hiddenShopName = shopParam;
-            document.getElementById('shopFieldContainer').classList.add('hidden');
-            document.getElementById('shopName').removeAttribute('required');
+        // UI Views
+        const mainView = document.getElementById('mainView');
+        const fgfView = document.getElementById('fgfView');
+        const adminView = document.getElementById('adminView');
+        const popupModal = document.getElementById('popupModal');
+
+        // จัดการหน้าที่จะแสดงตอนเริ่มต้น
+        if (modeParam === 'fgf') {
+            mainView.classList.add('hidden');
+            fgfView.classList.remove('hidden');
+        } else {
+            mainView.classList.remove('hidden');
+            fgfView.classList.add('hidden');
+            if (shopParam) {
+                hiddenShopName = shopParam;
+                document.getElementById('shopFieldContainer').classList.add('hidden');
+                document.getElementById('shopName').removeAttribute('required');
+            }
         }
 
         const ADMIN_PIN = "SURE0635824615";
@@ -216,6 +405,9 @@
         let isPopupShowing = false;
 
         function shouldShowPopup() {
+            // ซ่อนป็อปอัพถ้อยู่ในโหมด FGF หรือ Admin
+            if(modeParam === 'fgf' || !adminView.classList.contains('hidden')) return false;
+
             const hiddenUntil = localStorage.getItem('hidePopupUntil');
             if (hiddenUntil) {
                 if (Date.now() < parseInt(hiddenUntil, 10)) {
@@ -227,7 +419,6 @@
             return true;
         }
 
-        // ฟังก์ชันโหลดรูปภาพแบบไม่ให้กระพริบ
         function setImages(bgUrl, headerUrl) {
             const bgImg = document.getElementById('pageBackgroundImage');
             const targetBg = bgUrl || "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2075&q=80";
@@ -250,10 +441,7 @@
             }
         }
 
-        const mainView = document.getElementById('mainView');
-        const adminView = document.getElementById('adminView');
-        const popupModal = document.getElementById('popupModal');
-
+        // --- ระบบ Admin ---
         const togglePasswordBtn = document.getElementById('togglePasswordBtn');
         const adminPasswordInput = document.getElementById('adminPassword');
         const eyeOpenIcon = document.getElementById('eyeOpenIcon');
@@ -273,12 +461,20 @@
 
         document.getElementById('openAdminBtn').addEventListener('click', () => {
             mainView.classList.add('hidden');
+            fgfView.classList.add('hidden');
             adminView.classList.remove('hidden');
         });
 
         document.getElementById('backToHomeBtn').addEventListener('click', () => {
             adminView.classList.add('hidden');
-            mainView.classList.remove('hidden');
+            
+            // กลับไปหน้าที่เข้ามาก่อนกดแอดมิน
+            if(modeParam === 'fgf'){
+                fgfView.classList.remove('hidden');
+            } else {
+                mainView.classList.remove('hidden');
+            }
+            
             document.getElementById('adminPassword').value = '';
             adminPasswordInput.type = 'password'; 
             eyeOpenIcon.classList.remove('hidden');
@@ -320,6 +516,51 @@
             }
         });
 
+        // ฟังก์ชันช่วยเหลือสำหรับ Friend Get Friend ในแอดมิน
+        document.getElementById('copyFgfLinkBtn').addEventListener('click', () => {
+            // สร้าง URL ใหม่จากหน้าต่างปัจจุบัน เพื่อรักษาพารามิเตอร์เก่าๆ เอาไว้ แล้วเสริม ?mode=fgf ลงไป
+            const urlObj = new URL(window.location.href);
+            urlObj.searchParams.set('mode', 'fgf');
+            const fgfUrl = urlObj.href;
+            
+            // ใช้ document.execCommand('copy') แทน navigator.clipboard เพื่อป้องกันปัญหา Permission ใน iFrame
+            const tempInput = document.createElement('input');
+            tempInput.value = fgfUrl;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999); // สำหรับมือถือ
+            
+            try {
+                const successful = document.execCommand('copy');
+                if(successful) {
+                    alert('คัดลอกลิงก์สำเร็จ!\n' + fgfUrl);
+                } else {
+                    alert('ไม่สามารถคัดลอกลิงก์ได้ กรุณาคัดลอกด้วยตัวเอง:\n' + fgfUrl);
+                }
+            } catch (err) {
+                console.error('ไม่สามารถคัดลอกได้', err);
+                alert('ไม่สามารถคัดลอกลิงก์ได้ กรุณาคัดลอกด้วยตัวเอง:\n' + fgfUrl);
+            }
+            document.body.removeChild(tempInput);
+        });
+
+        document.getElementById('previewFgfBtn').addEventListener('click', () => {
+            adminView.classList.add('hidden');
+            fgfView.classList.remove('hidden');
+            // เพิ่มปุ่มกลับไปหน้าแอดมินลอยๆ ไว้
+            const btn = document.createElement('button');
+            btn.innerHTML = "กลับหน้าแอดมิน";
+            btn.className = "fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-full z-[100] text-sm shadow-lg";
+            btn.onclick = () => {
+                fgfView.classList.add('hidden');
+                adminView.classList.remove('hidden');
+                btn.remove();
+            };
+            document.body.appendChild(btn);
+        });
+
+
+        // --- Firebase ---
         let currentUser = null;
         let db = null;
         let auth = null;
@@ -327,7 +568,6 @@
 
         try {
             let firebaseConfig = YOUR_FIREBASE_CONFIG;
-            
             if (!YOUR_FIREBASE_CONFIG.apiKey && typeof __firebase_config !== 'undefined') {
                 const configStr = typeof __firebase_config !== 'undefined' ? __firebase_config : '{}';
                 firebaseConfig = JSON.parse(configStr);
@@ -349,8 +589,7 @@
                         } else {
                             await signInAnonymously(auth); 
                         }
-                    } 
-                    catch (error) { console.error("Auth error:", error); setImages(null, null); }
+                    } catch (error) { console.error("Auth error:", error); setImages(null, null); }
                 };
 
                 onAuthStateChanged(auth, (user) => {
@@ -358,26 +597,17 @@
                     if (user) loadPopupSettings();
                 });
                 initAuth();
-            } else {
-                setImages(null, null); // โหลดรูปเริ่มต้นกรณีไม่มี Config
-            }
-        } catch (err) {
-            console.error("Firebase init failed:", err);
-            setImages(null, null); // โหลดรูปเริ่มต้นกรณี Error
-        }
+            } else { setImages(null, null); }
+        } catch (err) { console.error("Firebase init failed:", err); setImages(null, null); }
 
         function loadPopupSettings() {
-            if (!currentUser || !db || dbPath.length === 0) {
-                setImages(null, null);
-                return;
-            }
+            if (!currentUser || !db || dbPath.length === 0) { setImages(null, null); return; }
             const docRef = doc(db, ...dbPath);
             
             onSnapshot(docRef, (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     currentPopupData = data; 
-                    
                     document.getElementById('popupActiveToggle').checked = data.isActive === true;
                     
                     if (data.imageUrl) {
@@ -393,7 +623,6 @@
                         }
                     }
 
-                    // เรียกใช้ฟังก์ชันเซ็ตภาพพื้นหลัง/หน้าปก โดยไม่ให้กระพริบ
                     setImages(data.bgImageUrl, data.headerImageUrl);
 
                     if (data.headerImageUrl) {
@@ -401,26 +630,20 @@
                         document.getElementById('adminHeaderImagePreview').classList.remove('hidden');
                         document.getElementById('noHeaderImageText').classList.add('hidden');
                     }
-
                     if (data.bgImageUrl) {
                         document.getElementById('adminBgImagePreview').src = data.bgImageUrl;
                         document.getElementById('adminBgImagePreview').classList.remove('hidden');
                         document.getElementById('noBgImageText').classList.add('hidden');
                     }
-                } else {
-                    setImages(null, null);
-                }
-            }, (error) => {
-                console.error("Snapshot Error: ", error);
-                setImages(null, null);
-            });
+                } else { setImages(null, null); }
+            }, (error) => { console.error("Snapshot Error: ", error); setImages(null, null); });
         }
 
+        // Image upload handling
         function handleImageUpload(inputId, previewId, placeholderId, callback, maxWidth = 800) {
             document.getElementById(inputId).addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
-
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = (event) => {
@@ -433,7 +656,6 @@
                         canvas.width = w; canvas.height = h;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, w, h);
-                        
                         const base64 = canvas.toDataURL('image/webp', 0.8);
                         document.getElementById(previewId).src = base64;
                         document.getElementById(previewId).classList.remove('hidden');
@@ -444,18 +666,14 @@
             });
         }
 
-        let uploadedBase64 = null;
-        let uploadedHeaderBase64 = null;
-        let uploadedBgBase64 = null;
+        let uploadedBase64 = null, uploadedHeaderBase64 = null, uploadedBgBase64 = null;
 
-        handleImageUpload('popupImageUpload', 'adminImagePreview', 'noImageText', (base64) => uploadedBase64 = base64, 800);
-        handleImageUpload('headerImageUpload', 'adminHeaderImagePreview', 'noHeaderImageText', (base64) => {
-            uploadedHeaderBase64 = base64;
-            document.getElementById('mainHeaderImage').src = base64; 
+        handleImageUpload('popupImageUpload', 'adminImagePreview', 'noImageText', (b) => uploadedBase64 = b, 800);
+        handleImageUpload('headerImageUpload', 'adminHeaderImagePreview', 'noHeaderImageText', (b) => {
+            uploadedHeaderBase64 = b; document.getElementById('mainHeaderImage').src = b; 
         }, 1000);
-        handleImageUpload('bgImageUpload', 'adminBgImagePreview', 'noBgImageText', (base64) => {
-            uploadedBgBase64 = base64;
-            document.getElementById('pageBackgroundImage').src = base64; 
+        handleImageUpload('bgImageUpload', 'adminBgImagePreview', 'noBgImageText', (b) => {
+            uploadedBgBase64 = b; document.getElementById('pageBackgroundImage').src = b; 
         }, 1200);
 
         document.getElementById('savePopupBtn').addEventListener('click', async () => {
@@ -464,19 +682,11 @@
             
             const btn = document.getElementById('savePopupBtn');
             const originalText = btn.innerHTML;
-            btn.innerHTML = `
-                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                กำลังบันทึก...
-            `;
+            btn.innerHTML = 'กำลังบันทึก...';
             
             try {
                 const docRef = doc(db, ...dbPath);
-                const dataToSave = { 
-                    isActive: document.getElementById('popupActiveToggle').checked 
-                };
+                const dataToSave = { isActive: document.getElementById('popupActiveToggle').checked };
                 
                 if (uploadedBase64) dataToSave.imageUrl = uploadedBase64;
                 else if (currentPopupData && currentPopupData.imageUrl) dataToSave.imageUrl = currentPopupData.imageUrl;
@@ -488,47 +698,175 @@
                 else if (currentPopupData && currentPopupData.bgImageUrl) dataToSave.bgImageUrl = currentPopupData.bgImageUrl;
 
                 await setDoc(docRef, dataToSave, { merge: true });
-                alert("บันทึกการตั้งค่าเรียบร้อย!\n(กดปุ่ม 'ปิดหน้าต่างนี้' เพื่อดูตัวอย่าง)");
+                alert("บันทึกการตั้งค่าเรียบร้อย!");
             } catch (error) {
-                console.error("Save Error: ", error);
-                if (error.code === 'permission-denied') {
-                    alert("⚠️ บันทึกไม่สำเร็จ: ติดระบบรักษาความปลอดภัยของ Firebase\nกรุณาตั้งค่า Rules ให้เป็น allow read, write: if true;");
-                } else {
-                    alert("เกิดข้อผิดพลาดในการบันทึก กรุณาลองใหม่อีกครั้ง");
-                }
-            } finally {
-                btn.innerHTML = originalText;
-            }
+                console.error(error); alert("เกิดข้อผิดพลาดในการบันทึก");
+            } finally { btn.innerHTML = originalText; }
         });
 
+        // ==========================================
+        // ฟอร์ม 1 : ลงทะเบียนปกติ
+        // ==========================================
         document.getElementById('leadForm').addEventListener('submit', async (e) => {
             e.preventDefault(); 
-
             const fullName = document.getElementById('fullName').value;
             const phone = document.getElementById('phone').value;
-            
             let finalShopName = hiddenShopName || document.getElementById('shopName').value;
             if(!finalShopName) finalShopName = "ไม่ระบุแหล่งที่มา";
 
+            document.getElementById('loadingText').innerText = 'กำลังพาท่านไปที่ LINE...';
             document.getElementById('loadingOverlay').classList.remove('hidden');
 
             const formData = new FormData();
+            formData.append('formType', 'normal_lead');
             formData.append('fullName', fullName);
             formData.append('phone', "'" + phone); 
             formData.append('shopName', finalShopName);
 
             try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: formData,
-                    mode: 'no-cors' 
-                });
+                await fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' });
                 window.location.href = LINE_URL;
             } catch (error) {
-                console.error("Error: ", error);
                 window.location.href = LINE_URL; 
             }
         });
+
+        // ==========================================
+        // ฟอร์ม 2 : Friend Get Friend (FGF) 
+        // ==========================================
+        let fgfStep = 1;
+        const formEls = {
+            email: document.getElementById('fgfEmail'),
+            refName: document.getElementById('fgfRefName'),
+            refPhone: document.getElementById('fgfRefPhone'),
+            refStatus: document.getElementById('fgfRefStatus'),
+            salesName: document.getElementById('fgfSalesName'),
+            salesOther: document.getElementById('fgfSalesOther'),
+            tarName: document.getElementById('fgfTargetName'),
+            tarPhone: document.getElementById('fgfTargetPhone'),
+            tarLine: document.getElementById('fgfTargetLine'),
+            tarProject: document.getElementById('fgfTargetProject'),
+        };
+
+        // แสดง/ซ่อน ช่องเซลล์ตามสถานะ
+        formEls.refStatus.addEventListener('change', (e) => {
+            if(e.target.value === 'ลูกค้าของ Startup Up Real Estate') {
+                document.getElementById('fgfSalesArea').classList.remove('hidden');
+            } else {
+                document.getElementById('fgfSalesArea').classList.add('hidden');
+                formEls.salesName.value = '';
+                formEls.salesOther.value = '';
+            }
+        });
+
+        formEls.salesName.addEventListener('change', (e) => {
+            if(e.target.value === 'อื่นๆ') document.getElementById('fgfSalesOtherArea').classList.remove('hidden');
+            else { document.getElementById('fgfSalesOtherArea').classList.add('hidden'); formEls.salesOther.value = ''; }
+        });
+
+        // กรองตัวเลขสำหรับเบอร์โทร
+        [formEls.refPhone, formEls.tarPhone].forEach(el => {
+            el.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
+        });
+
+        function showError(id, msg) {
+            const el = document.getElementById(id);
+            el.innerText = msg;
+            el.classList.remove('hidden');
+            el.previousElementSibling.classList.add('border-red-500');
+        }
+        function hideError(id) {
+            const el = document.getElementById(id);
+            el.classList.add('hidden');
+            el.previousElementSibling.classList.remove('border-red-500');
+        }
+
+        function validateFgfStep() {
+            let isValid = true;
+            ['errEmail','errRefName','errRefPhone','errRefStatus','errSalesName','errSalesOther','errTargetName','errTargetPhone','errTargetLine','errTargetProject'].forEach(hideError);
+
+            if (fgfStep === 1) {
+                if (!formEls.email.value) { showError('errEmail', 'กรุณาระบุอีเมล'); isValid = false; }
+                else if (!/\S+@\S+\.\S+/.test(formEls.email.value)) { showError('errEmail', 'รูปแบบอีเมลไม่ถูกต้อง'); isValid = false; }
+            } else if (fgfStep === 2) {
+                if (!formEls.refName.value) { showError('errRefName', 'กรุณาระบุชื่อ-นามสกุล'); isValid = false; }
+                if (formEls.refPhone.value.length !== 10) { showError('errRefPhone', 'กรุณาระบุเบอร์ติดต่อ 10 หลัก'); isValid = false; }
+                if (!formEls.refStatus.value) { showError('errRefStatus', 'กรุณาเลือกสถานะ'); isValid = false; }
+                
+                if (formEls.refStatus.value === 'ลูกค้าของ Startup Up Real Estate') {
+                    if (!formEls.salesName.value) { showError('errSalesName', 'กรุณาเลือกเซลล์ที่ดูแล'); isValid = false; }
+                    if (formEls.salesName.value === 'อื่นๆ' && !formEls.salesOther.value) { showError('errSalesOther', 'กรุณาระบุชื่อเซลล์'); isValid = false; }
+                }
+            } else if (fgfStep === 3) {
+                if (!formEls.tarName.value) { showError('errTargetName', 'กรุณาระบุชื่อ-นามสกุล'); isValid = false; }
+                if (formEls.tarPhone.value.length !== 10) { showError('errTargetPhone', 'กรุณาระบุเบอร์ติดต่อ 10 หลัก'); isValid = false; }
+                if (!formEls.tarLine.value) { showError('errTargetLine', 'กรุณาระบุ ID LINE'); isValid = false; }
+                if (!formEls.tarProject.value) { showError('errTargetProject', 'กรุณาระบุโครงการที่สนใจ'); isValid = false; }
+            }
+            return isValid;
+        }
+
+        function updateFgfUI() {
+            [1,2,3].forEach(i => { document.getElementById('fgfStep'+i).classList.add('hidden'); });
+            document.getElementById('fgfStep'+fgfStep).classList.remove('hidden');
+
+            document.getElementById('fgfPrevBtn').classList.toggle('hidden', fgfStep === 1);
+            document.getElementById('fgfNextBtn').classList.toggle('hidden', fgfStep === 3);
+            document.getElementById('fgfSubmitBtn').classList.toggle('hidden', fgfStep !== 3);
+
+            // Update Stepper colors
+            [1,2,3].forEach(i => {
+                const cir = document.getElementById('stepCir'+i);
+                if(fgfStep >= i) { cir.className = "w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-[#0B3D1B] text-white border-[#0B3D1B] transition-colors duration-300"; }
+                else { cir.className = "w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-white text-gray-400 border-gray-300 transition-colors duration-300"; }
+                
+                if(i < 3) {
+                    const line = document.getElementById('stepLine'+i);
+                    line.className = fgfStep > i ? "w-10 h-1 bg-[#0B3D1B] transition-colors duration-300" : "w-10 h-1 bg-gray-200 transition-colors duration-300";
+                }
+            });
+        }
+
+        document.getElementById('fgfNextBtn').addEventListener('click', () => {
+            if (validateFgfStep()) { fgfStep++; updateFgfUI(); }
+        });
+        document.getElementById('fgfPrevBtn').addEventListener('click', () => {
+            fgfStep--; updateFgfUI();
+        });
+
+        document.getElementById('fgfSubmitBtn').addEventListener('click', async () => {
+            if (!validateFgfStep()) return;
+
+            document.getElementById('loadingText').innerText = 'กำลังส่งข้อมูล...';
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+
+            const formData = new FormData();
+            formData.append('formType', 'friend_get_friend');
+            formData.append('email', formEls.email.value);
+            formData.append('referrerName', formEls.refName.value);
+            formData.append('referrerPhone', "'" + formEls.refPhone.value);
+            formData.append('referrerStatus', formEls.refStatus.value);
+            formData.append('salesName', formEls.salesName.value === 'อื่นๆ' ? formEls.salesOther.value : formEls.salesName.value);
+            formData.append('referredName', formEls.tarName.value);
+            formData.append('referredPhone', "'" + formEls.tarPhone.value);
+            formData.append('referredLineId', formEls.tarLine.value);
+            formData.append('projectOfInterest', formEls.tarProject.value);
+            
+            // แนบ Shop Name ที่ซ่อนอยู่ไปด้วย
+            let finalShopName = hiddenShopName || "ไม่ระบุแหล่งที่มา";
+            formData.append('shopName', finalShopName);
+
+            try {
+                await fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' });
+                document.getElementById('loadingOverlay').classList.add('hidden');
+                document.getElementById('fgfFormArea').classList.add('hidden');
+                document.getElementById('fgfSuccessArea').classList.remove('hidden');
+            } catch (error) {
+                document.getElementById('loadingOverlay').classList.add('hidden');
+                alert('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง');
+            }
+        });
+
     </script>
 </body>
 </html>
