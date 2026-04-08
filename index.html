@@ -339,7 +339,7 @@
                 <p class="text-gray-600 text-sm text-center mb-6 px-4">
                     ขอบคุณสำหรับการแนะนำลูกค้า ทางทีมงานได้รับข้อมูลเรียบร้อยแล้วและจะติดต่อกลับโดยเร็วที่สุด
                 </p>
-                <button onclick="window.location.reload()" class="py-2.5 px-6 bg-[#0B3D1B] text-white rounded-xl font-bold hover:bg-[#082a13] transition-colors text-sm shadow-md">
+                <button id="fgfResetBtn" class="py-2.5 px-6 bg-[#0B3D1B] text-white rounded-xl font-bold hover:bg-[#082a13] transition-colors text-sm shadow-md">
                     ทำรายการใหม่
                 </button>
             </div>
@@ -865,6 +865,16 @@
                 document.getElementById('loadingOverlay').classList.add('hidden');
                 alert('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง');
             }
+        });
+
+        // จัดการปุ่ม "ทำรายการใหม่" ให้พาไปหน้า Friend Get Friend เสมอ
+        document.getElementById('fgfResetBtn').addEventListener('click', () => {
+            let redirectUrl = '?mode=fgf';
+            // ถ้ามีค่าร้านค้าติดมาด้วย ให้พ่วงกลับไปด้วย
+            if (hiddenShopName) {
+                redirectUrl += '&shop=' + hiddenShopName;
+            }
+            window.location.href = redirectUrl;
         });
 
     </script>
