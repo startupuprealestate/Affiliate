@@ -349,12 +349,12 @@
                             <p id="errTargetPhone" class="text-red-500 text-xs mt-1 hidden"></p>
                         </div>
                         <div>
-                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">ID LINE <span class="text-red-500">*</span></label>
+                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">ID LINE <span class="text-xs text-gray-400 font-normal">(ไม่บังคับ)</span></label>
                             <input type="text" id="fgfTargetLine" class="w-full p-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" placeholder="ระบุ LINE ID...">
                             <p id="errTargetLine" class="text-red-500 text-xs mt-1 hidden"></p>
                         </div>
                         <div>
-                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">โครงการที่สนใจ <span class="text-red-500">*</span></label>
+                            <label class="block text-[13px] font-semibold text-gray-700 mb-1">โครงการที่สนใจ <span class="text-xs text-gray-400 font-normal">(ไม่บังคับ)</span></label>
                             <input type="text" id="fgfTargetProject" class="w-full p-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" placeholder="ระบุชื่อโครงการ...">
                             <p id="errTargetProject" class="text-red-500 text-xs mt-1 hidden"></p>
                         </div>
@@ -835,8 +835,7 @@
             } else if (fgfStep === 4) {
                 if (!formEls.tarName.value) { showError('errTargetName', 'กรุณาระบุชื่อ-นามสกุล'); isValid = false; }
                 if (formEls.tarPhone.value.length !== 10) { showError('errTargetPhone', 'กรุณาระบุเบอร์ติดต่อ 10 หลัก'); isValid = false; }
-                if (!formEls.tarLine.value) { showError('errTargetLine', 'กรุณาระบุ ID LINE'); isValid = false; }
-                if (!formEls.tarProject.value) { showError('errTargetProject', 'กรุณาระบุโครงการที่สนใจ'); isValid = false; }
+                // นำเงื่อนไขบังคับกรอก ID LINE และ โครงการที่สนใจ ออก
             }
             return isValid;
         }
