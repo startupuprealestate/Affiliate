@@ -25,7 +25,7 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 25px -5px rgba(0, 185, 0, 0.4);
         }
-        /* Custom Scrollbar for FGF */
+        /* Custom Scrollbar */
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
@@ -92,64 +92,92 @@
             <button id="loginAdminBtn" class="w-full bg-gray-800 text-white py-3 rounded-xl font-medium hover:bg-gray-900 transition-colors shadow-md">เข้าสู่ระบบ</button>
         </div>
 
-        <div id="adminDashboard" class="hidden p-4 sm:p-5 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
+        <div id="adminDashboard" class="hidden p-4 sm:p-5 space-y-5 overflow-y-auto flex-1 custom-scrollbar">
             
-            <!-- ส่วนจัดการ Friend Get Friend -->
-            <div class="border border-[#D4AF37]/50 p-4 rounded-xl bg-[#0B3D1B]/5 shadow-sm">
-                <h3 class="font-bold text-[#0B3D1B] mb-2 flex items-center gap-2">
+            <!-- โซนที่ 1: ตั้งค่าทั่วไป -->
+            <div class="border-2 border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                <div class="bg-gray-100 p-3 font-bold text-gray-700 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    โซนตั้งค่าทั่วไป
+                </div>
+                <div class="p-4 space-y-4 bg-white">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-2">อัปโหลดรูปภาพหน้าปก (ด้านบน)</label>
+                        <input type="file" id="headerImageUpload" accept="image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer">
+                        <div class="mt-2 border border-dashed border-gray-300 rounded-xl p-2 bg-gray-50 relative min-h-[80px] flex items-center justify-center overflow-hidden">
+                            <p id="noHeaderImageText" class="text-xs text-gray-400 absolute">ใช้รูปภาพเริ่มต้น</p>
+                            <img id="adminHeaderImagePreview" src="" class="w-full h-auto max-h-20 object-cover rounded-lg hidden relative z-10">
+                        </div>
+                    </div>
+                    <hr class="border-gray-100">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-2">อัปโหลดรูปภาพพื้นหลังเว็บ (ทำให้จางอัตโนมัติ)</label>
+                        <input type="file" id="bgImageUpload" accept="image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer">
+                        <div class="mt-2 border border-dashed border-gray-300 rounded-xl p-2 bg-gray-50 relative min-h-[80px] flex items-center justify-center overflow-hidden">
+                            <p id="noBgImageText" class="text-xs text-gray-400 absolute">ใช้รูปภาพเริ่มต้น</p>
+                            <img id="adminBgImagePreview" src="" class="w-full h-auto max-h-20 object-cover rounded-lg hidden relative z-10 opacity-50">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- โซนที่ 2: Affiliate -->
+            <div class="border-2 border-blue-200 rounded-xl overflow-hidden shadow-sm">
+                <div class="bg-blue-100 p-3 font-bold text-blue-800 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                    โซน Affiliate (หน้าลงทะเบียน)
+                </div>
+                <div class="p-4 space-y-4 bg-blue-50/30">
+                    <div class="flex items-center justify-between bg-white p-3 rounded-xl border border-blue-100 shadow-sm">
+                        <span class="font-medium text-gray-700 text-sm">เปิดป็อปอัพโปรโมชั่น</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="popupActiveToggle" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-2">อัปโหลดรูปภาพป็อปอัพ</label>
+                        <input type="file" id="popupImageUpload" accept="image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 cursor-pointer">
+                        <div class="mt-2 border border-dashed border-blue-200 rounded-xl p-2 bg-white relative min-h-[100px] flex items-center justify-center overflow-hidden">
+                            <p id="noImageText" class="text-xs text-gray-400 absolute">ยังไม่มีรูปภาพป็อปอัพ</p>
+                            <img id="adminImagePreview" src="" class="w-full h-auto max-h-24 object-contain rounded-lg hidden relative z-10">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- โซนที่ 3: Friend Get Friend -->
+            <div class="border-2 border-[#D4AF37]/50 rounded-xl overflow-hidden shadow-sm">
+                <div class="bg-[#D4AF37]/20 p-3 font-bold text-[#0B3D1B] flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                    ระบบ Friend Get Friend
-                </h3>
-                <p class="text-xs text-gray-600 mb-3">ลูกค้าทั่วไปจะไม่เห็นหน้านี้ คุณสามารถก๊อปปี้ลิงก์ส่งให้ลูกค้าที่ต้องการได้โดยตรง</p>
-                <div class="flex gap-2">
-                    <button id="copyFgfLinkBtn" class="flex-1 bg-white border border-[#0B3D1B] text-[#0B3D1B] py-2 px-2 rounded-lg text-xs font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-1">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                        คัดลอกลิงก์
-                    </button>
-                    <button id="previewFgfBtn" class="flex-1 bg-[#0B3D1B] text-white py-2 px-2 rounded-lg text-xs font-medium hover:bg-[#082a13] transition-colors flex items-center justify-center gap-1">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                        ดูหน้าฟอร์ม
-                    </button>
+                    โซน Friend Get Friend
+                </div>
+                <div class="p-4 space-y-4 bg-[#0B3D1B]/5">
+                    <p class="text-xs text-gray-600">กดคัดลอกลิงก์ด้านล่างเพื่อส่งให้ลูกค้าเข้าหน้านี้โดยตรง</p>
+                    <div class="flex gap-2">
+                        <button id="copyFgfLinkBtn" class="flex-1 bg-white border border-[#0B3D1B] text-[#0B3D1B] py-2 px-2 rounded-lg text-xs font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            คัดลอกลิงก์
+                        </button>
+                        <button id="previewFgfBtn" class="flex-1 bg-[#0B3D1B] text-white py-2 px-2 rounded-lg text-xs font-medium hover:bg-[#082a13] transition-colors flex items-center justify-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            ดูหน้าฟอร์ม
+                        </button>
+                    </div>
+                    <hr class="border-[#0B3D1B]/10">
+                    <div>
+                        <label class="block text-xs font-medium text-[#0B3D1B] mb-2">อัปโหลดรูปภาพโปรโมชั่น (สำหรับแสดงใน Step 2)</label>
+                        <input type="file" id="fgfPromoImageUpload" accept="image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:font-semibold file:bg-[#D4AF37]/20 file:text-[#0B3D1B] hover:file:bg-[#D4AF37]/40 cursor-pointer">
+                        <div class="mt-2 border border-dashed border-[#D4AF37]/50 rounded-xl p-2 bg-white relative min-h-[100px] flex items-center justify-center overflow-hidden">
+                            <p id="noFgfPromoImageText" class="text-xs text-gray-400 absolute">ยังไม่มีรูปภาพโปรโมชั่น</p>
+                            <img id="adminFgfPromoImagePreview" src="" class="w-full h-auto max-h-24 object-contain rounded-lg hidden relative z-10">
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex items-center justify-between bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
-                <span class="font-medium text-gray-700 text-sm">เปิดแสดงป็อปอัพให้ลูกค้าเห็น</span>
-                <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="popupActiveToggle" class="sr-only peer">
-                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00B900]"></div>
-                </label>
-            </div>
-
-            <div class="border border-gray-100 p-3 rounded-xl bg-white shadow-sm">
-                <label class="block text-xs font-medium text-gray-700 mb-2">อัปโหลดรูปภาพป็อปอัพ</label>
-                <input type="file" id="popupImageUpload" accept="image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer transition-colors">
-                <div class="mt-2 border border-dashed border-gray-300 rounded-xl p-2 bg-gray-50 relative min-h-[100px] flex items-center justify-center overflow-hidden">
-                    <p id="noImageText" class="text-xs text-gray-400 absolute">ยังไม่มีรูปภาพป็อปอัพ</p>
-                    <img id="adminImagePreview" src="" class="w-full h-auto max-h-24 object-contain rounded-lg hidden relative z-10">
-                </div>
-            </div>
-
-            <div class="border border-gray-100 p-3 rounded-xl bg-white shadow-sm">
-                <label class="block text-xs font-medium text-gray-700 mb-2">อัปโหลดรูปภาพหน้าปกโครงการ</label>
-                <input type="file" id="headerImageUpload" accept="image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer transition-colors">
-                <div class="mt-2 border border-dashed border-gray-300 rounded-xl p-2 bg-gray-50 relative min-h-[80px] flex items-center justify-center overflow-hidden">
-                    <p id="noHeaderImageText" class="text-xs text-gray-400 absolute">ใช้รูปภาพเริ่มต้น</p>
-                    <img id="adminHeaderImagePreview" src="" class="w-full h-auto max-h-20 object-cover rounded-lg hidden relative z-10">
-                </div>
-            </div>
-
-            <div class="border border-gray-100 p-3 rounded-xl bg-white shadow-sm">
-                <label class="block text-xs font-medium text-gray-700 mb-2">อัปโหลดรูปภาพพื้นหลังเว็บ</label>
-                <input type="file" id="bgImageUpload" accept="image/*" class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer transition-colors">
-                <div class="mt-2 border border-dashed border-gray-300 rounded-xl p-2 bg-gray-50 relative min-h-[80px] flex items-center justify-center overflow-hidden">
-                    <p id="noBgImageText" class="text-xs text-gray-400 absolute">ใช้รูปภาพเริ่มต้น</p>
-                    <img id="adminBgImagePreview" src="" class="w-full h-auto max-h-20 object-cover rounded-lg hidden relative z-10 opacity-50">
-                </div>
-            </div>
-
-            <button id="savePopupBtn" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all shadow-md">
-                บันทึกการตั้งค่า
+            <button id="savePopupBtn" class="w-full bg-gradient-to-r from-gray-800 to-black text-white py-3.5 rounded-xl font-medium hover:shadow-lg transition-all shadow-md mt-2">
+                บันทึกการตั้งค่าทั้งหมด
             </button>
             <div class="text-center pt-1 pb-2">
                 <button id="logoutAdminBtn" class="text-red-500 text-xs font-medium hover:text-red-700 transition-colors">ออกจากระบบหลังบ้าน</button>
@@ -210,34 +238,33 @@
         <div class="p-5 sm:p-6 flex-1 flex flex-col overflow-y-auto custom-scrollbar">
             
             <div id="fgfFormArea" class="flex-1 flex flex-col">
-                <div class="text-center mb-5 shrink-0">
+                <div class="text-center mb-4 shrink-0">
                     <h1 class="text-xl font-bold text-[#0B3D1B] mb-1">Startup Up Real Estate</h1>
-                    <p class="text-xs text-gray-500">แบบฟอร์มแนะนำเพื่อนซื้อบ้าน</p>
+                    <p class="text-xs text-gray-500">แบบฟอร์มแนะนำลูกค้าโครงการ</p>
                 </div>
 
-                <!-- Stepper -->
-                <div class="flex items-center justify-center mb-6 shrink-0">
-                    <div id="stepCir1" class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-[#0B3D1B] text-white border-[#0B3D1B] transition-colors duration-300">1</div>
-                    <div id="stepLine1" class="w-10 h-1 bg-gray-200 transition-colors duration-300"></div>
-                    <div id="stepCir2" class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-white text-gray-400 border-gray-300 transition-colors duration-300">2</div>
-                    <div id="stepLine2" class="w-10 h-1 bg-gray-200 transition-colors duration-300"></div>
-                    <div id="stepCir3" class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-white text-gray-400 border-gray-300 transition-colors duration-300">3</div>
+                <!-- Stepper (เพิ่มเป็น 4 Steps) -->
+                <div class="flex items-center justify-center mb-5 shrink-0 px-2">
+                    <div id="stepCir1" class="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-[#0B3D1B] text-white border-[#0B3D1B] transition-colors duration-300">1</div>
+                    <div id="stepLine1" class="w-6 sm:w-8 h-1 bg-gray-200 transition-colors duration-300"></div>
+                    <div id="stepCir2" class="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-white text-gray-400 border-gray-300 transition-colors duration-300">2</div>
+                    <div id="stepLine2" class="w-6 sm:w-8 h-1 bg-gray-200 transition-colors duration-300"></div>
+                    <div id="stepCir3" class="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-white text-gray-400 border-gray-300 transition-colors duration-300">3</div>
+                    <div id="stepLine3" class="w-6 sm:w-8 h-1 bg-gray-200 transition-colors duration-300"></div>
+                    <div id="stepCir4" class="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-white text-gray-400 border-gray-300 transition-colors duration-300">4</div>
                 </div>
 
                 <div class="flex-1 overflow-y-auto custom-scrollbar pr-1">
-                    <!-- Step 1 -->
+                    <!-- Step 1: เงื่อนไข -->
                     <div id="fgfStep1" class="space-y-4 animate-[fadeIn_0.3s_ease-out]">
                         <div class="bg-gray-50 px-4 pb-4 pt-0 rounded-xl border border-gray-100 text-xs sm:text-[13px] text-gray-700 leading-relaxed h-48 overflow-y-auto custom-scrollbar">
                             <h3 class="font-bold text-[#0B3D1B] text-sm sticky top-0 bg-gray-50 pt-4 pb-3 z-10">เงื่อนไข</h3>
-                            
                             <p class="font-bold text-[#D4AF37] mb-1">FRIEND GETS FRIEND เพื่อนได้บ้าน เราได้เงิน</p>
                             <p class="mb-3 font-semibold text-[#0B3D1B]">แนะนำเพื่อนซื้อบ้านกับทาง STARTUP UP REAL ESTATE รับไปเลย 10,000 บาท</p>
-                            
                             <ul class="list-disc pl-5 space-y-1.5 mb-4">
                                 <li>ข้อมูลของท่านจะถูกเก็บเป็นความลับและใช้เพื่อการติดต่อเท่านั้น</li>
                                 <li>บริษัทขอสงวนสิทธิ์ในการเปลี่ยนแปลงเงื่อนไขโดยไม่ต้องแจ้งให้ทราบ</li>
                             </ul>
-
                             <h4 class="font-bold text-gray-800 mb-1">ผู้แนะนำ</h4>
                             <ul class="list-disc pl-5 space-y-1.5 mb-4">
                                 <li>ผู้แนะนำต้องลงทะเบียนผ่านทาง Startup Up Real Estate - Friend Get Friend เท่านั้น</li>
@@ -245,7 +272,6 @@
                                 <li>กรณีมีผู้แนะนำลงทะเบียนชื่อผู้ถูกแนะนำซ้ำกัน ขอสงวนสิทธิ์ให้กับผู้แนะนำที่ลงทะเบียนมาก่อน โดยดูจากวันที่และเวลาที่ลงทะเบียน</li>
                                 <li>สิทธิประโยชน์จะได้รับเมื่อผู้ถูกแนะนำโอนกรรมสิทธิ์ ไม่เกิน 15 วัน โดยค่าแนะนำจะถูกหักภาษีรายได้ 3%</li>
                             </ul>
-
                             <h4 class="font-bold text-gray-800 mb-1">ผู้ถูกแนะนำ</h4>
                             <ul class="list-disc pl-5 space-y-1.5">
                                 <li>ผู้ถูกแนะนำจะต้องไม่เคยโทรสอบถามรายละเอียด , ลงทะเบียนผ่านช่องทาง online , Walk in ไปที่โครงการและต้องไม่เคยให้ข้อมูลส่วนตัวมาก่อน</li>
@@ -263,8 +289,21 @@
                         </div>
                     </div>
 
-                    <!-- Step 2 -->
-                    <div id="fgfStep2" class="hidden space-y-3.5 animate-[fadeIn_0.3s_ease-out]">
+                    <!-- Step 2: รูปภาพโปรโมชั่น (NEW) -->
+                    <div id="fgfStep2" class="hidden space-y-4 animate-[fadeIn_0.3s_ease-out]">
+                        <h2 class="text-base font-bold text-[#0B3D1B] border-b pb-1 mb-2 border-[#D4AF37]/30">สิทธิพิเศษ Friend Get Friend</h2>
+                        
+                        <div id="fgfStep2ImageContainer" class="hidden w-full flex justify-center">
+                            <img id="fgfStep2Image" src="" class="w-full h-auto max-h-[50vh] object-contain rounded-xl shadow-md border border-gray-100">
+                        </div>
+                        <div id="fgfStep2NoImage" class="w-full py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400">
+                            <svg class="w-12 h-12 mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <p class="text-sm font-medium">รอการอัปเดตโปรโมชั่นเร็วๆ นี้</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: ข้อมูลผู้แนะนำ -->
+                    <div id="fgfStep3" class="hidden space-y-3.5 animate-[fadeIn_0.3s_ease-out]">
                         <h2 class="text-base font-bold text-[#0B3D1B] border-b pb-1 mb-2 border-[#D4AF37]/30">ข้อมูลผู้แนะนำ (ตัวคุณ)</h2>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-700 mb-1">ชื่อ-นามสกุล <span class="text-red-500">*</span></label>
@@ -305,8 +344,8 @@
                         </div>
                     </div>
 
-                    <!-- Step 3 -->
-                    <div id="fgfStep3" class="hidden space-y-3.5 animate-[fadeIn_0.3s_ease-out]">
+                    <!-- Step 4: ข้อมูลผู้ถูกแนะนำ -->
+                    <div id="fgfStep4" class="hidden space-y-3.5 animate-[fadeIn_0.3s_ease-out]">
                         <h2 class="text-base font-bold text-[#D4AF37] border-b pb-1 mb-2 border-[#0B3D1B]/30">ข้อมูลผู้ถูกแนะนำ</h2>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-700 mb-1">ชื่อ-นามสกุล <span class="text-red-500">*</span></label>
@@ -332,7 +371,7 @@
                 </div>
 
                 <!-- Navigation Buttons -->
-                <div class="mt-5 flex gap-2 pt-3 border-t border-gray-100 shrink-0">
+                <div class="mt-4 flex gap-2 pt-3 border-t border-gray-100 shrink-0">
                     <button id="fgfPrevBtn" class="hidden flex-1 py-2.5 px-3 border-2 border-[#0B3D1B] text-[#0B3D1B] rounded-xl font-bold flex items-center justify-center gap-1 hover:bg-[#0B3D1B]/5 transition-colors text-sm">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> ย้อนกลับ
                     </button>
@@ -392,16 +431,14 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const shopParam = urlParams.get('shop');
-        const modeParam = urlParams.get('mode'); // เช็คโหมด fgf
+        const modeParam = urlParams.get('mode');
         let hiddenShopName = null;
 
-        // UI Views
         const mainView = document.getElementById('mainView');
         const fgfView = document.getElementById('fgfView');
         const adminView = document.getElementById('adminView');
         const popupModal = document.getElementById('popupModal');
 
-        // จัดการหน้าที่จะแสดงตอนเริ่มต้น
         if (modeParam === 'fgf') {
             mainView.classList.add('hidden');
             fgfView.classList.remove('hidden');
@@ -420,16 +457,11 @@
         let isPopupShowing = false;
 
         function shouldShowPopup() {
-            // ซ่อนป็อปอัพถ้อยู่ในโหมด FGF หรือ Admin
             if(modeParam === 'fgf' || !adminView.classList.contains('hidden')) return false;
-
             const hiddenUntil = localStorage.getItem('hidePopupUntil');
             if (hiddenUntil) {
-                if (Date.now() < parseInt(hiddenUntil, 10)) {
-                    return false; 
-                } else {
-                    localStorage.removeItem('hidePopupUntil'); 
-                }
+                if (Date.now() < parseInt(hiddenUntil, 10)) { return false; } 
+                else { localStorage.removeItem('hidePopupUntil'); }
             }
             return true;
         }
@@ -441,8 +473,7 @@
                 bgImg.onload = () => { bgImg.classList.remove('opacity-0'); bgImg.classList.add('opacity-25'); };
                 bgImg.src = targetBg;
             } else {
-                bgImg.classList.remove('opacity-0'); 
-                bgImg.classList.add('opacity-25');
+                bgImg.classList.remove('opacity-0'); bgImg.classList.add('opacity-25');
             }
 
             const headerImg = document.getElementById('mainHeaderImage');
@@ -451,8 +482,7 @@
                 headerImg.onload = () => { headerImg.classList.remove('opacity-0'); headerImg.classList.add('opacity-100'); };
                 headerImg.src = targetHeader;
             } else {
-                headerImg.classList.remove('opacity-0');
-                headerImg.classList.add('opacity-100');
+                headerImg.classList.remove('opacity-0'); headerImg.classList.add('opacity-100');
             }
         }
 
@@ -482,13 +512,8 @@
 
         document.getElementById('backToHomeBtn').addEventListener('click', () => {
             adminView.classList.add('hidden');
-            
-            // กลับไปหน้าที่เข้ามาก่อนกดแอดมิน
-            if(modeParam === 'fgf'){
-                fgfView.classList.remove('hidden');
-            } else {
-                mainView.classList.remove('hidden');
-            }
+            if(modeParam === 'fgf'){ fgfView.classList.remove('hidden'); } 
+            else { mainView.classList.remove('hidden'); }
             
             document.getElementById('adminPassword').value = '';
             adminPasswordInput.type = 'password'; 
@@ -507,9 +532,7 @@
             if (document.getElementById('adminPassword').value === ADMIN_PIN) {
                 document.getElementById('adminLoginForm').classList.add('hidden');
                 document.getElementById('adminDashboard').classList.remove('hidden');
-            } else {
-                alert("รหัสผ่านไม่ถูกต้อง");
-            }
+            } else { alert("รหัสผ่านไม่ถูกต้อง"); }
         });
 
         document.getElementById('logoutAdminBtn').addEventListener('click', () => {
@@ -524,36 +547,28 @@
         document.getElementById('closePopupBtn').addEventListener('click', () => {
             popupModal.classList.add('hidden');
             isPopupShowing = false;
-            
             if (document.getElementById('hidePopup24h').checked) {
                 const hideUntil = Date.now() + (24 * 60 * 60 * 1000); 
                 localStorage.setItem('hidePopupUntil', hideUntil);
             }
         });
 
-        // ฟังก์ชันช่วยเหลือสำหรับ Friend Get Friend ในแอดมิน
         document.getElementById('copyFgfLinkBtn').addEventListener('click', () => {
-            // สร้าง URL ใหม่จากหน้าต่างปัจจุบัน เพื่อรักษาพารามิเตอร์เก่าๆ เอาไว้ แล้วเสริม ?mode=fgf ลงไป
             const urlObj = new URL(window.location.href);
             urlObj.searchParams.set('mode', 'fgf');
             const fgfUrl = urlObj.href;
             
-            // ใช้ document.execCommand('copy') แทน navigator.clipboard เพื่อป้องกันปัญหา Permission ใน iFrame
             const tempInput = document.createElement('input');
             tempInput.value = fgfUrl;
             document.body.appendChild(tempInput);
             tempInput.select();
-            tempInput.setSelectionRange(0, 99999); // สำหรับมือถือ
+            tempInput.setSelectionRange(0, 99999); 
             
             try {
                 const successful = document.execCommand('copy');
-                if(successful) {
-                    alert('คัดลอกลิงก์สำเร็จ!\n' + fgfUrl);
-                } else {
-                    alert('ไม่สามารถคัดลอกลิงก์ได้ กรุณาคัดลอกด้วยตัวเอง:\n' + fgfUrl);
-                }
+                if(successful) { alert('คัดลอกลิงก์สำเร็จ!\n' + fgfUrl); } 
+                else { alert('ไม่สามารถคัดลอกลิงก์ได้ กรุณาคัดลอกด้วยตัวเอง:\n' + fgfUrl); }
             } catch (err) {
-                console.error('ไม่สามารถคัดลอกได้', err);
                 alert('ไม่สามารถคัดลอกลิงก์ได้ กรุณาคัดลอกด้วยตัวเอง:\n' + fgfUrl);
             }
             document.body.removeChild(tempInput);
@@ -562,7 +577,6 @@
         document.getElementById('previewFgfBtn').addEventListener('click', () => {
             adminView.classList.add('hidden');
             fgfView.classList.remove('hidden');
-            // เพิ่มปุ่มกลับไปหน้าแอดมินลอยๆ ไว้
             const btn = document.createElement('button');
             btn.innerHTML = "กลับหน้าแอดมิน";
             btn.className = "fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-full z-[100] text-sm shadow-lg";
@@ -574,18 +588,13 @@
             document.body.appendChild(btn);
         });
 
-
         // --- Firebase ---
-        let currentUser = null;
-        let db = null;
-        let auth = null;
-        let dbPath = [];
+        let currentUser = null, db = null, auth = null, dbPath = [];
 
         try {
             let firebaseConfig = YOUR_FIREBASE_CONFIG;
             if (!YOUR_FIREBASE_CONFIG.apiKey && typeof __firebase_config !== 'undefined') {
-                const configStr = typeof __firebase_config !== 'undefined' ? __firebase_config : '{}';
-                firebaseConfig = JSON.parse(configStr);
+                firebaseConfig = JSON.parse(__firebase_config || '{}');
                 const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
                 dbPath = ['artifacts', appId, 'public', 'data', 'popup_config', 'settings'];
             } else if (YOUR_FIREBASE_CONFIG.apiKey) {
@@ -601,10 +610,8 @@
                     try { 
                         if (!YOUR_FIREBASE_CONFIG.apiKey && typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                             await signInWithCustomToken(auth, __initial_auth_token);
-                        } else {
-                            await signInAnonymously(auth); 
-                        }
-                    } catch (error) { console.error("Auth error:", error); setImages(null, null); }
+                        } else { await signInAnonymously(auth); }
+                    } catch (error) { setImages(null, null); }
                 };
 
                 onAuthStateChanged(auth, (user) => {
@@ -613,7 +620,7 @@
                 });
                 initAuth();
             } else { setImages(null, null); }
-        } catch (err) { console.error("Firebase init failed:", err); setImages(null, null); }
+        } catch (err) { setImages(null, null); }
 
         function loadPopupSettings() {
             if (!currentUser || !db || dbPath.length === 0) { setImages(null, null); return; }
@@ -638,6 +645,19 @@
                         }
                     }
 
+                    if (data.fgfPromoImageUrl) {
+                        document.getElementById('adminFgfPromoImagePreview').src = data.fgfPromoImageUrl;
+                        document.getElementById('adminFgfPromoImagePreview').classList.remove('hidden');
+                        document.getElementById('noFgfPromoImageText').classList.add('hidden');
+                        
+                        document.getElementById('fgfStep2Image').src = data.fgfPromoImageUrl;
+                        document.getElementById('fgfStep2ImageContainer').classList.remove('hidden');
+                        document.getElementById('fgfStep2NoImage').classList.add('hidden');
+                    } else {
+                        document.getElementById('fgfStep2ImageContainer').classList.add('hidden');
+                        document.getElementById('fgfStep2NoImage').classList.remove('hidden');
+                    }
+
                     setImages(data.bgImageUrl, data.headerImageUrl);
 
                     if (data.headerImageUrl) {
@@ -651,10 +671,9 @@
                         document.getElementById('noBgImageText').classList.add('hidden');
                     }
                 } else { setImages(null, null); }
-            }, (error) => { console.error("Snapshot Error: ", error); setImages(null, null); });
+            }, () => { setImages(null, null); });
         }
 
-        // Image upload handling
         function handleImageUpload(inputId, previewId, placeholderId, callback, maxWidth = 800) {
             document.getElementById(inputId).addEventListener('change', (e) => {
                 const file = e.target.files[0];
@@ -681,7 +700,7 @@
             });
         }
 
-        let uploadedBase64 = null, uploadedHeaderBase64 = null, uploadedBgBase64 = null;
+        let uploadedBase64 = null, uploadedHeaderBase64 = null, uploadedBgBase64 = null, uploadedFgfPromoBase64 = null;
 
         handleImageUpload('popupImageUpload', 'adminImagePreview', 'noImageText', (b) => uploadedBase64 = b, 800);
         handleImageUpload('headerImageUpload', 'adminHeaderImagePreview', 'noHeaderImageText', (b) => {
@@ -690,6 +709,12 @@
         handleImageUpload('bgImageUpload', 'adminBgImagePreview', 'noBgImageText', (b) => {
             uploadedBgBase64 = b; document.getElementById('pageBackgroundImage').src = b; 
         }, 1200);
+        handleImageUpload('fgfPromoImageUpload', 'adminFgfPromoImagePreview', 'noFgfPromoImageText', (b) => {
+            uploadedFgfPromoBase64 = b; 
+            document.getElementById('fgfStep2Image').src = b; 
+            document.getElementById('fgfStep2ImageContainer').classList.remove('hidden');
+            document.getElementById('fgfStep2NoImage').classList.add('hidden');
+        }, 1000);
 
         document.getElementById('savePopupBtn').addEventListener('click', async () => {
             if (!db) return alert("ไม่สามารถบันทึกได้! กรุณาตั้งค่า Firebase Config");
@@ -712,10 +737,13 @@
                 if (uploadedBgBase64) dataToSave.bgImageUrl = uploadedBgBase64;
                 else if (currentPopupData && currentPopupData.bgImageUrl) dataToSave.bgImageUrl = currentPopupData.bgImageUrl;
 
+                if (uploadedFgfPromoBase64) dataToSave.fgfPromoImageUrl = uploadedFgfPromoBase64;
+                else if (currentPopupData && currentPopupData.fgfPromoImageUrl) dataToSave.fgfPromoImageUrl = currentPopupData.fgfPromoImageUrl;
+
                 await setDoc(docRef, dataToSave, { merge: true });
                 alert("บันทึกการตั้งค่าเรียบร้อย!");
             } catch (error) {
-                console.error(error); alert("เกิดข้อผิดพลาดในการบันทึก");
+                alert("เกิดข้อผิดพลาดในการบันทึก");
             } finally { btn.innerHTML = originalText; }
         });
 
@@ -763,7 +791,6 @@
             tarProject: document.getElementById('fgfTargetProject'),
         };
 
-        // แสดง/ซ่อน ช่องเซลล์ตามสถานะ
         formEls.refStatus.addEventListener('change', (e) => {
             if(e.target.value === 'ลูกค้าของ Startup Up Real Estate') {
                 document.getElementById('fgfSalesArea').classList.remove('hidden');
@@ -779,7 +806,6 @@
             else { document.getElementById('fgfSalesOtherArea').classList.add('hidden'); formEls.salesOther.value = ''; }
         });
 
-        // กรองตัวเลขสำหรับเบอร์โทร
         [formEls.refPhone, formEls.tarPhone].forEach(el => {
             el.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
         });
@@ -804,6 +830,8 @@
                 if (!formEls.email.value) { showError('errEmail', 'กรุณาระบุอีเมล'); isValid = false; }
                 else if (!/\S+@\S+\.\S+/.test(formEls.email.value)) { showError('errEmail', 'รูปแบบอีเมลไม่ถูกต้อง'); isValid = false; }
             } else if (fgfStep === 2) {
+                // หน้า 2 เป็นแค่รูปภาพ ไม่ต้อง validate ใดๆ
+            } else if (fgfStep === 3) {
                 if (!formEls.refName.value) { showError('errRefName', 'กรุณาระบุชื่อ-นามสกุล'); isValid = false; }
                 if (formEls.refPhone.value.length !== 10) { showError('errRefPhone', 'กรุณาระบุเบอร์ติดต่อ 10 หลัก'); isValid = false; }
                 if (!formEls.refStatus.value) { showError('errRefStatus', 'กรุณาเลือกสถานะ'); isValid = false; }
@@ -812,7 +840,7 @@
                     if (!formEls.salesName.value) { showError('errSalesName', 'กรุณาเลือกเซลล์ที่ดูแล'); isValid = false; }
                     if (formEls.salesName.value === 'อื่นๆ' && !formEls.salesOther.value) { showError('errSalesOther', 'กรุณาระบุชื่อเซลล์'); isValid = false; }
                 }
-            } else if (fgfStep === 3) {
+            } else if (fgfStep === 4) {
                 if (!formEls.tarName.value) { showError('errTargetName', 'กรุณาระบุชื่อ-นามสกุล'); isValid = false; }
                 if (formEls.tarPhone.value.length !== 10) { showError('errTargetPhone', 'กรุณาระบุเบอร์ติดต่อ 10 หลัก'); isValid = false; }
                 if (!formEls.tarLine.value) { showError('errTargetLine', 'กรุณาระบุ ID LINE'); isValid = false; }
@@ -822,22 +850,22 @@
         }
 
         function updateFgfUI() {
-            [1,2,3].forEach(i => { document.getElementById('fgfStep'+i).classList.add('hidden'); });
+            [1,2,3,4].forEach(i => { document.getElementById('fgfStep'+i).classList.add('hidden'); });
             document.getElementById('fgfStep'+fgfStep).classList.remove('hidden');
 
             document.getElementById('fgfPrevBtn').classList.toggle('hidden', fgfStep === 1);
-            document.getElementById('fgfNextBtn').classList.toggle('hidden', fgfStep === 3);
-            document.getElementById('fgfSubmitBtn').classList.toggle('hidden', fgfStep !== 3);
+            document.getElementById('fgfNextBtn').classList.toggle('hidden', fgfStep === 4);
+            document.getElementById('fgfSubmitBtn').classList.toggle('hidden', fgfStep !== 4);
 
-            // Update Stepper colors
-            [1,2,3].forEach(i => {
+            // เปลี่ยนสีสถานะด้านบน
+            [1,2,3,4].forEach(i => {
                 const cir = document.getElementById('stepCir'+i);
-                if(fgfStep >= i) { cir.className = "w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-[#0B3D1B] text-white border-[#0B3D1B] transition-colors duration-300"; }
-                else { cir.className = "w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-white text-gray-400 border-gray-300 transition-colors duration-300"; }
+                if(fgfStep >= i) { cir.className = "w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-[#0B3D1B] text-white border-[#0B3D1B] transition-colors duration-300"; }
+                else { cir.className = "w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-white text-gray-400 border-gray-300 transition-colors duration-300"; }
                 
-                if(i < 3) {
+                if(i < 4) {
                     const line = document.getElementById('stepLine'+i);
-                    line.className = fgfStep > i ? "w-10 h-1 bg-[#0B3D1B] transition-colors duration-300" : "w-10 h-1 bg-gray-200 transition-colors duration-300";
+                    line.className = fgfStep > i ? "w-6 sm:w-8 h-1 bg-[#0B3D1B] transition-colors duration-300" : "w-6 sm:w-8 h-1 bg-gray-200 transition-colors duration-300";
                 }
             });
         }
@@ -867,7 +895,6 @@
             formData.append('referredLineId', formEls.tarLine.value);
             formData.append('projectOfInterest', formEls.tarProject.value);
             
-            // แนบ Shop Name ที่ซ่อนอยู่ไปด้วย
             let finalShopName = hiddenShopName || "ไม่ระบุแหล่งที่มา";
             formData.append('shopName', finalShopName);
 
@@ -882,13 +909,9 @@
             }
         });
 
-        // จัดการปุ่ม "ทำรายการใหม่" ให้พาไปหน้า Friend Get Friend เสมอ
         document.getElementById('fgfResetBtn').addEventListener('click', () => {
             let redirectUrl = '?mode=fgf';
-            // ถ้ามีค่าร้านค้าติดมาด้วย ให้พ่วงกลับไปด้วย
-            if (hiddenShopName) {
-                redirectUrl += '&shop=' + hiddenShopName;
-            }
+            if (hiddenShopName) { redirectUrl += '&shop=' + hiddenShopName; }
             window.location.href = redirectUrl;
         });
 
