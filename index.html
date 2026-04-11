@@ -134,6 +134,17 @@
                             <img id="adminBgImagePreview" src="" class="w-full h-auto max-h-20 object-cover rounded-lg hidden relative z-10 opacity-50">
                         </div>
                     </div>
+                    <hr class="border-gray-100">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-2">จัดการตัวเลือก "สแกน QR Code จากที่ไหน?"</label>
+                        <div class="flex gap-2 mb-2">
+                            <input type="text" id="newShopOptionInput" placeholder="เพิ่มแหล่งที่มาใหม่..." class="flex-1 text-sm p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400">
+                            <button type="button" id="addShopOptionBtn" class="bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-black transition-colors">เพิ่ม</button>
+                        </div>
+                        <ul id="adminShopOptionsList" class="space-y-2 mt-3 max-h-40 overflow-y-auto custom-scrollbar pr-1">
+                            <!-- Options list injected by JS -->
+                        </ul>
+                    </div>
                 </div>
             </div>
 
@@ -205,7 +216,6 @@
                     <select id="shopName" required
                         class="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white/90 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all shadow-sm text-sm appearance-none">
                         <option value="" disabled selected>-- กรุณาเลือก --</option>
-                        <option value="ปัด • จุ • บัน Van Coffee Shop">ร้าน ปัด • จุ • บัน Van Coffee Shop</option>
                         <option value="อื่นๆ (แผ่นพับ, ใบปลิว, นามบัตร)">อื่นๆ (แผ่นพับ, ใบปลิว, นามบัตร)</option>
                     </select>
                 </div>
@@ -446,6 +456,7 @@
         const ADMIN_PIN = "SURE0635824615";
         let currentPopupData = null; 
         let isPopupShowing = false;
+        let currentShopOptions = ["อื่นๆ (แผ่นพับ, ใบปลิว, นามบัตร)"];
 
         function shouldShowPopup() {
             // เอาเงื่อนไขที่บล็อก modeParam === 'fgf' ออก เพื่อให้ป็อปอัพขึ้นทุกหน้า
@@ -580,6 +591,96 @@
             document.body.appendChild(btn);
         });
 
+        // --- จัดการ Dropdown แหล่งที่มา ---
+        function renderAdminShopOptions() {
+            const list = document.getElementById('adminShopOptionsList');
+            list.innerHTML = '';
+            currentShopOptions.forEach((opt, index) => {
+                const li = document.createElement('li');
+                li.className = 'flex justify-between items-center bg-gray-50 p-2 rounded-lg border border-gray-200 text-sm';
+                li.innerHTML = `
+                    <span class="text-gray-700 truncate flex-1 mr-2">${opt}</span>
+                    <div class="flex items-center gap-1 shrink-0">
+                        <button type="button" data-index="${index}" class="move-up-shop-opt-btn text-gray-400 hover:text-blue-500 p-1 disabled:opacity-30 disabled:hover:text-gray-400 transition-colors" ${index === 0 ? 'disabled' : ''} title="เลื่อนขึ้น">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"></path></svg>
+                        </button>
+                        <button type="button" data-index="${index}" class="move-down-shop-opt-btn text-gray-400 hover:text-blue-500 p-1 disabled:opacity-30 disabled:hover:text-gray-400 transition-colors" ${index === currentShopOptions.length - 1 ? 'disabled' : ''} title="เลื่อนลง">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <button type="button" data-index="${index}" class="delete-shop-opt-btn text-red-500 hover:text-red-700 p-1 ml-1 transition-colors" title="ลบ">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+
+            // ปุ่มลบ
+            document.querySelectorAll('.delete-shop-opt-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(e.currentTarget.getAttribute('data-index'));
+                    currentShopOptions.splice(idx, 1);
+                    renderAdminShopOptions();
+                    renderCustomerShopOptions();
+                });
+            });
+
+            // ปุ่มเลื่อนขึ้น
+            document.querySelectorAll('.move-up-shop-opt-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(e.currentTarget.getAttribute('data-index'));
+                    if (idx > 0) {
+                        const temp = currentShopOptions[idx];
+                        currentShopOptions[idx] = currentShopOptions[idx - 1];
+                        currentShopOptions[idx - 1] = temp;
+                        renderAdminShopOptions();
+                        renderCustomerShopOptions();
+                    }
+                });
+            });
+
+            // ปุ่มเลื่อนลง
+            document.querySelectorAll('.move-down-shop-opt-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(e.currentTarget.getAttribute('data-index'));
+                    if (idx < currentShopOptions.length - 1) {
+                        const temp = currentShopOptions[idx];
+                        currentShopOptions[idx] = currentShopOptions[idx + 1];
+                        currentShopOptions[idx + 1] = temp;
+                        renderAdminShopOptions();
+                        renderCustomerShopOptions();
+                    }
+                });
+            });
+        }
+
+        function renderCustomerShopOptions() {
+            const select = document.getElementById('shopName');
+            if(select) {
+                select.innerHTML = '<option value="" disabled selected>-- กรุณาเลือก --</option>';
+                currentShopOptions.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt;
+                    option.textContent = opt;
+                    select.appendChild(option);
+                });
+            }
+        }
+        
+        document.getElementById('addShopOptionBtn').addEventListener('click', () => {
+            const input = document.getElementById('newShopOptionInput');
+            const val = input.value.trim();
+            if (val && !currentShopOptions.includes(val)) {
+                currentShopOptions.push(val);
+                input.value = '';
+                renderAdminShopOptions();
+                renderCustomerShopOptions();
+            }
+        });
+
+        renderAdminShopOptions();
+        renderCustomerShopOptions();
+
         // --- Firebase ---
         let currentUser = null, db = null, auth = null, dbPath = [];
 
@@ -662,6 +763,12 @@
                         document.getElementById('adminBgImagePreview').classList.remove('hidden');
                         document.getElementById('noBgImageText').classList.add('hidden');
                     }
+
+                    if (data.shopOptions && Array.isArray(data.shopOptions)) {
+                        currentShopOptions = data.shopOptions;
+                        renderAdminShopOptions();
+                        renderCustomerShopOptions();
+                    }
                 } else { setImages(null, null); }
             }, () => { setImages(null, null); });
         }
@@ -731,6 +838,8 @@
 
                 if (uploadedFgfPromoBase64) dataToSave.fgfPromoImageUrl = uploadedFgfPromoBase64;
                 else if (currentPopupData && currentPopupData.fgfPromoImageUrl) dataToSave.fgfPromoImageUrl = currentPopupData.fgfPromoImageUrl;
+
+                dataToSave.shopOptions = currentShopOptions;
 
                 await setDoc(docRef, dataToSave, { merge: true });
                 alert("บันทึกการตั้งค่าเรียบร้อย!");
