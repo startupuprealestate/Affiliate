@@ -459,7 +459,6 @@
         let currentShopOptions = ["อื่นๆ (แผ่นพับ, ใบปลิว, นามบัตร)"];
 
         function shouldShowPopup() {
-            // เอาเงื่อนไขที่บล็อก modeParam === 'fgf' ออก เพื่อให้ป็อปอัพขึ้นทุกหน้า
             if(!adminView.classList.contains('hidden')) return false;
             const hiddenUntil = localStorage.getItem('hidePopupUntil');
             if (hiddenUntil) {
@@ -489,364 +488,9 @@
             }
         }
 
-        // --- ระบบ Admin ---
-        const togglePasswordBtn = document.getElementById('togglePasswordBtn');
-        const adminPasswordInput = document.getElementById('adminPassword');
-        const eyeOpenIcon = document.getElementById('eyeOpenIcon');
-        const eyeClosedIcon = document.getElementById('eyeClosedIcon');
-
-        togglePasswordBtn.addEventListener('click', () => {
-            if (adminPasswordInput.type === 'password') {
-                adminPasswordInput.type = 'text';
-                eyeOpenIcon.classList.add('hidden');
-                eyeClosedIcon.classList.remove('hidden');
-            } else {
-                adminPasswordInput.type = 'password';
-                eyeOpenIcon.classList.remove('hidden');
-                eyeClosedIcon.classList.add('hidden');
-            }
-        });
-
-        document.getElementById('openAdminBtn').addEventListener('click', () => {
-            mainView.classList.add('hidden');
-            fgfView.classList.add('hidden');
-            adminView.classList.remove('hidden');
-        });
-
-        document.getElementById('backToHomeBtn').addEventListener('click', () => {
-            adminView.classList.add('hidden');
-            if(modeParam === 'fgf'){ fgfView.classList.remove('hidden'); } 
-            else { mainView.classList.remove('hidden'); }
-            
-            document.getElementById('adminPassword').value = '';
-            adminPasswordInput.type = 'password'; 
-            eyeOpenIcon.classList.remove('hidden');
-            eyeClosedIcon.classList.add('hidden');
-            
-            if (currentPopupData && currentPopupData.isActive && currentPopupData.imageUrl && shouldShowPopup()) {
-                document.getElementById('hidePopup24h').checked = false; 
-                document.getElementById('popupImage').src = currentPopupData.imageUrl;
-                popupModal.classList.remove('hidden');
-                isPopupShowing = true;
-            }
-        });
-
-        document.getElementById('loginAdminBtn').addEventListener('click', () => {
-            if (document.getElementById('adminPassword').value === ADMIN_PIN) {
-                document.getElementById('adminLoginForm').classList.add('hidden');
-                document.getElementById('adminDashboard').classList.remove('hidden');
-            } else { alert("รหัสผ่านไม่ถูกต้อง"); }
-        });
-
-        document.getElementById('logoutAdminBtn').addEventListener('click', () => {
-            document.getElementById('adminDashboard').classList.add('hidden');
-            document.getElementById('adminLoginForm').classList.remove('hidden');
-            document.getElementById('adminPassword').value = '';
-            adminPasswordInput.type = 'password'; 
-            eyeOpenIcon.classList.remove('hidden');
-            eyeClosedIcon.classList.add('hidden');
-        });
-
-        document.getElementById('closePopupBtn').addEventListener('click', () => {
-            popupModal.classList.add('hidden');
-            isPopupShowing = false;
-            if (document.getElementById('hidePopup24h').checked) {
-                const hideUntil = Date.now() + (24 * 60 * 60 * 1000); 
-                localStorage.setItem('hidePopupUntil', hideUntil);
-            }
-        });
-
-        document.getElementById('copyFgfLinkBtn').addEventListener('click', () => {
-            const urlObj = new URL(window.location.href);
-            urlObj.searchParams.set('mode', 'fgf');
-            const fgfUrl = urlObj.href;
-            
-            const tempInput = document.createElement('input');
-            tempInput.value = fgfUrl;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            tempInput.setSelectionRange(0, 99999); 
-            
-            try {
-                const successful = document.execCommand('copy');
-                if(successful) { alert('คัดลอกลิงก์สำเร็จ!\n' + fgfUrl); } 
-                else { alert('ไม่สามารถคัดลอกลิงก์ได้ กรุณาคัดลอกด้วยตัวเอง:\n' + fgfUrl); }
-            } catch (err) {
-                alert('ไม่สามารถคัดลอกลิงก์ได้ กรุณาคัดลอกด้วยตัวเอง:\n' + fgfUrl);
-            }
-            document.body.removeChild(tempInput);
-        });
-
-        document.getElementById('previewFgfBtn').addEventListener('click', () => {
-            adminView.classList.add('hidden');
-            fgfView.classList.remove('hidden');
-            const btn = document.createElement('button');
-            btn.innerHTML = "กลับหน้าแอดมิน";
-            btn.className = "fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-full z-[100] text-sm shadow-lg";
-            btn.onclick = () => {
-                fgfView.classList.add('hidden');
-                adminView.classList.remove('hidden');
-                btn.remove();
-            };
-            document.body.appendChild(btn);
-        });
-
-        // --- จัดการ Dropdown แหล่งที่มา ---
-        function renderAdminShopOptions() {
-            const list = document.getElementById('adminShopOptionsList');
-            list.innerHTML = '';
-            currentShopOptions.forEach((opt, index) => {
-                const li = document.createElement('li');
-                li.className = 'flex justify-between items-center bg-gray-50 p-2 rounded-lg border border-gray-200 text-sm';
-                li.innerHTML = `
-                    <span class="text-gray-700 truncate flex-1 mr-2">${opt}</span>
-                    <div class="flex items-center gap-1 shrink-0">
-                        <button type="button" data-index="${index}" class="move-up-shop-opt-btn text-gray-400 hover:text-blue-500 p-1 disabled:opacity-30 disabled:hover:text-gray-400 transition-colors" ${index === 0 ? 'disabled' : ''} title="เลื่อนขึ้น">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"></path></svg>
-                        </button>
-                        <button type="button" data-index="${index}" class="move-down-shop-opt-btn text-gray-400 hover:text-blue-500 p-1 disabled:opacity-30 disabled:hover:text-gray-400 transition-colors" ${index === currentShopOptions.length - 1 ? 'disabled' : ''} title="เลื่อนลง">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-                        </button>
-                        <button type="button" data-index="${index}" class="delete-shop-opt-btn text-red-500 hover:text-red-700 p-1 ml-1 transition-colors" title="ลบ">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                        </button>
-                    </div>
-                `;
-                list.appendChild(li);
-            });
-
-            // ปุ่มลบ
-            document.querySelectorAll('.delete-shop-opt-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const idx = parseInt(e.currentTarget.getAttribute('data-index'));
-                    currentShopOptions.splice(idx, 1);
-                    renderAdminShopOptions();
-                    renderCustomerShopOptions();
-                });
-            });
-
-            // ปุ่มเลื่อนขึ้น
-            document.querySelectorAll('.move-up-shop-opt-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const idx = parseInt(e.currentTarget.getAttribute('data-index'));
-                    if (idx > 0) {
-                        const temp = currentShopOptions[idx];
-                        currentShopOptions[idx] = currentShopOptions[idx - 1];
-                        currentShopOptions[idx - 1] = temp;
-                        renderAdminShopOptions();
-                        renderCustomerShopOptions();
-                    }
-                });
-            });
-
-            // ปุ่มเลื่อนลง
-            document.querySelectorAll('.move-down-shop-opt-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const idx = parseInt(e.currentTarget.getAttribute('data-index'));
-                    if (idx < currentShopOptions.length - 1) {
-                        const temp = currentShopOptions[idx];
-                        currentShopOptions[idx] = currentShopOptions[idx + 1];
-                        currentShopOptions[idx + 1] = temp;
-                        renderAdminShopOptions();
-                        renderCustomerShopOptions();
-                    }
-                });
-            });
-        }
-
-        function renderCustomerShopOptions() {
-            const select = document.getElementById('shopName');
-            if(select) {
-                select.innerHTML = '<option value="" disabled selected>-- กรุณาเลือก --</option>';
-                currentShopOptions.forEach(opt => {
-                    const option = document.createElement('option');
-                    option.value = opt;
-                    option.textContent = opt;
-                    select.appendChild(option);
-                });
-            }
-        }
-        
-        document.getElementById('addShopOptionBtn').addEventListener('click', () => {
-            const input = document.getElementById('newShopOptionInput');
-            const val = input.value.trim();
-            if (val && !currentShopOptions.includes(val)) {
-                currentShopOptions.push(val);
-                input.value = '';
-                renderAdminShopOptions();
-                renderCustomerShopOptions();
-            }
-        });
-
-        renderAdminShopOptions();
-        renderCustomerShopOptions();
-
-        // --- Firebase ---
-        let currentUser = null, db = null, auth = null, dbPath = [];
-
-        try {
-            let firebaseConfig = YOUR_FIREBASE_CONFIG;
-            if (!YOUR_FIREBASE_CONFIG.apiKey && typeof __firebase_config !== 'undefined') {
-                firebaseConfig = JSON.parse(__firebase_config || '{}');
-                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-                dbPath = ['artifacts', appId, 'public', 'data', 'popup_config', 'settings'];
-            } else if (YOUR_FIREBASE_CONFIG.apiKey) {
-                dbPath = ['popup_data', 'settings'];
-            }
-            
-            if (firebaseConfig && Object.keys(firebaseConfig).length > 0) {
-                const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-                
-                const initAuth = async () => {
-                    try { 
-                        if (!YOUR_FIREBASE_CONFIG.apiKey && typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                            await signInWithCustomToken(auth, __initial_auth_token);
-                        } else { await signInAnonymously(auth); }
-                    } catch (error) { setImages(null, null); }
-                };
-
-                onAuthStateChanged(auth, (user) => {
-                    currentUser = user;
-                    if (user) loadPopupSettings();
-                });
-                initAuth();
-            } else { setImages(null, null); }
-        } catch (err) { setImages(null, null); }
-
-        function loadPopupSettings() {
-            if (!currentUser || !db || dbPath.length === 0) { setImages(null, null); return; }
-            const docRef = doc(db, ...dbPath);
-            
-            onSnapshot(docRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    currentPopupData = data; 
-                    document.getElementById('popupActiveToggle').checked = data.isActive === true;
-                    
-                    if (data.imageUrl) {
-                        document.getElementById('adminImagePreview').src = data.imageUrl;
-                        document.getElementById('adminImagePreview').classList.remove('hidden');
-                        document.getElementById('noImageText').classList.add('hidden');
-                        
-                        if (data.isActive && adminView.classList.contains('hidden') && !isPopupShowing && shouldShowPopup()) {
-                            document.getElementById('hidePopup24h').checked = false;
-                            document.getElementById('popupImage').src = data.imageUrl;
-                            popupModal.classList.remove('hidden');
-                            isPopupShowing = true;
-                        }
-                    }
-
-                    if (data.fgfPromoImageUrl) {
-                        document.getElementById('adminFgfPromoImagePreview').src = data.fgfPromoImageUrl;
-                        document.getElementById('adminFgfPromoImagePreview').classList.remove('hidden');
-                        document.getElementById('noFgfPromoImageText').classList.add('hidden');
-                        
-                        document.getElementById('fgfStep2Image').src = data.fgfPromoImageUrl;
-                        document.getElementById('fgfStep2ImageContainer').classList.remove('hidden');
-                        document.getElementById('fgfStep2NoImage').classList.add('hidden');
-                    } else {
-                        document.getElementById('fgfStep2ImageContainer').classList.add('hidden');
-                        document.getElementById('fgfStep2NoImage').classList.remove('hidden');
-                    }
-
-                    setImages(data.bgImageUrl, data.headerImageUrl);
-
-                    if (data.headerImageUrl) {
-                        document.getElementById('adminHeaderImagePreview').src = data.headerImageUrl;
-                        document.getElementById('adminHeaderImagePreview').classList.remove('hidden');
-                        document.getElementById('noHeaderImageText').classList.add('hidden');
-                    }
-                    if (data.bgImageUrl) {
-                        document.getElementById('adminBgImagePreview').src = data.bgImageUrl;
-                        document.getElementById('adminBgImagePreview').classList.remove('hidden');
-                        document.getElementById('noBgImageText').classList.add('hidden');
-                    }
-
-                    if (data.shopOptions && Array.isArray(data.shopOptions)) {
-                        currentShopOptions = data.shopOptions;
-                        renderAdminShopOptions();
-                        renderCustomerShopOptions();
-                    }
-                } else { setImages(null, null); }
-            }, () => { setImages(null, null); });
-        }
-
-        function handleImageUpload(inputId, previewId, placeholderId, callback, maxWidth = 800) {
-            document.getElementById(inputId).addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.src = event.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let w = img.width, h = img.height;
-                        if (w > maxWidth) { h = Math.round((h * maxWidth) / w); w = maxWidth; }
-                        canvas.width = w; canvas.height = h;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, w, h);
-                        const base64 = canvas.toDataURL('image/webp', 0.8);
-                        document.getElementById(previewId).src = base64;
-                        document.getElementById(previewId).classList.remove('hidden');
-                        document.getElementById(placeholderId).classList.add('hidden');
-                        callback(base64);
-                    };
-                };
-            });
-        }
-
-        let uploadedBase64 = null, uploadedHeaderBase64 = null, uploadedBgBase64 = null, uploadedFgfPromoBase64 = null;
-
-        handleImageUpload('popupImageUpload', 'adminImagePreview', 'noImageText', (b) => uploadedBase64 = b, 800);
-        handleImageUpload('headerImageUpload', 'adminHeaderImagePreview', 'noHeaderImageText', (b) => {
-            uploadedHeaderBase64 = b; document.getElementById('mainHeaderImage').src = b; 
-        }, 1000);
-        handleImageUpload('bgImageUpload', 'adminBgImagePreview', 'noBgImageText', (b) => {
-            uploadedBgBase64 = b; document.getElementById('pageBackgroundImage').src = b; 
-        }, 1200);
-        handleImageUpload('fgfPromoImageUpload', 'adminFgfPromoImagePreview', 'noFgfPromoImageText', (b) => {
-            uploadedFgfPromoBase64 = b; 
-            document.getElementById('fgfStep2Image').src = b; 
-            document.getElementById('fgfStep2ImageContainer').classList.remove('hidden');
-            document.getElementById('fgfStep2NoImage').classList.add('hidden');
-        }, 1000);
-
-        document.getElementById('savePopupBtn').addEventListener('click', async () => {
-            if (!db) return alert("ไม่สามารถบันทึกได้! กรุณาตั้งค่า Firebase Config");
-            if (!currentUser) return alert("กำลังเชื่อมต่อระบบ กรุณารอสักครู่");
-            
-            const btn = document.getElementById('savePopupBtn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = 'กำลังบันทึก...';
-            
-            try {
-                const docRef = doc(db, ...dbPath);
-                const dataToSave = { isActive: document.getElementById('popupActiveToggle').checked };
-                
-                if (uploadedBase64) dataToSave.imageUrl = uploadedBase64;
-                else if (currentPopupData && currentPopupData.imageUrl) dataToSave.imageUrl = currentPopupData.imageUrl;
-
-                if (uploadedHeaderBase64) dataToSave.headerImageUrl = uploadedHeaderBase64;
-                else if (currentPopupData && currentPopupData.headerImageUrl) dataToSave.headerImageUrl = currentPopupData.headerImageUrl;
-
-                if (uploadedBgBase64) dataToSave.bgImageUrl = uploadedBgBase64;
-                else if (currentPopupData && currentPopupData.bgImageUrl) dataToSave.bgImageUrl = currentPopupData.bgImageUrl;
-
-                if (uploadedFgfPromoBase64) dataToSave.fgfPromoImageUrl = uploadedFgfPromoBase64;
-                else if (currentPopupData && currentPopupData.fgfPromoImageUrl) dataToSave.fgfPromoImageUrl = currentPopupData.fgfPromoImageUrl;
-
-                dataToSave.shopOptions = currentShopOptions;
-
-                await setDoc(docRef, dataToSave, { merge: true });
-                alert("บันทึกการตั้งค่าเรียบร้อย!");
-            } catch (error) {
-                alert("เกิดข้อผิดพลาดในการบันทึก");
-            } finally { btn.innerHTML = originalText; }
-        });
+        // --- ระบบ Admin (ตัดออกเพื่อความสั้น วางต่อจากของเดิมได้เลย) ---
+        // ... โค้ดส่วนจัดการ Admin ให้คงไว้ตามเดิม ไม่ต้องแก้ ...
+        // ... ให้เลื่อนไปแก้ตรงจุด Submit ด้านล่างนี้ค่ะ ⬇️ ...
 
         // ==========================================
         // ฟอร์ม 1 : ลงทะเบียนปกติ
@@ -861,14 +505,20 @@
             document.getElementById('loadingText').innerText = 'กำลังพาท่านไปที่ LINE...';
             document.getElementById('loadingOverlay').classList.remove('hidden');
 
-            const formData = new FormData();
-            formData.append('formType', 'normal_lead');
-            formData.append('fullName', fullName);
-            formData.append('phone', "'" + phone); 
-            formData.append('shopName', finalShopName);
+            // 🚀 เปลี่ยนเป็น URLSearchParams เพื่อให้ฝั่ง Google Apps Script อ่านได้ 100%
+            const params = new URLSearchParams();
+            params.append('formType', 'normal_lead');
+            params.append('fullName', fullName);
+            params.append('phone', "'" + phone); 
+            params.append('shopName', finalShopName);
 
             try {
-                await fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' });
+                await fetch(SCRIPT_URL, { 
+                    method: 'POST', 
+                    body: params, 
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    mode: 'no-cors' 
+                });
                 window.location.href = LINE_URL;
             } catch (error) {
                 window.location.href = LINE_URL; 
@@ -892,90 +542,7 @@
             tarProject: document.getElementById('fgfTargetProject'),
         };
 
-        formEls.refStatus.addEventListener('change', (e) => {
-            if(e.target.value === 'ลูกค้าของ Startup Up Real Estate') {
-                document.getElementById('fgfSalesArea').classList.remove('hidden');
-            } else {
-                document.getElementById('fgfSalesArea').classList.add('hidden');
-                formEls.salesName.value = '';
-                formEls.salesOther.value = '';
-            }
-        });
-
-        formEls.salesName.addEventListener('change', (e) => {
-            if(e.target.value === 'อื่นๆ') document.getElementById('fgfSalesOtherArea').classList.remove('hidden');
-            else { document.getElementById('fgfSalesOtherArea').classList.add('hidden'); formEls.salesOther.value = ''; }
-        });
-
-        [formEls.refPhone, formEls.tarPhone].forEach(el => {
-            el.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
-        });
-
-        function showError(id, msg) {
-            const el = document.getElementById(id);
-            el.innerText = msg;
-            el.classList.remove('hidden');
-            el.previousElementSibling.classList.add('border-red-500');
-        }
-        function hideError(id) {
-            const el = document.getElementById(id);
-            el.classList.add('hidden');
-            el.previousElementSibling.classList.remove('border-red-500');
-        }
-
-        function validateFgfStep() {
-            let isValid = true;
-            ['errEmail','errRefName','errRefPhone','errRefStatus','errSalesName','errSalesOther','errTargetName','errTargetPhone','errTargetLine','errTargetProject'].forEach(hideError);
-
-            if (fgfStep === 1) {
-                if (!formEls.email.value) { showError('errEmail', 'กรุณาระบุอีเมล'); isValid = false; }
-                else if (!/\S+@\S+\.\S+/.test(formEls.email.value)) { showError('errEmail', 'รูปแบบอีเมลไม่ถูกต้อง'); isValid = false; }
-            } else if (fgfStep === 2) {
-                // หน้า 2 เป็นแค่รูปภาพ ไม่ต้อง validate ใดๆ
-            } else if (fgfStep === 3) {
-                if (!formEls.refName.value) { showError('errRefName', 'กรุณาระบุชื่อ-นามสกุล'); isValid = false; }
-                if (formEls.refPhone.value.length !== 10) { showError('errRefPhone', 'กรุณาระบุเบอร์ติดต่อ 10 หลัก'); isValid = false; }
-                if (!formEls.refStatus.value) { showError('errRefStatus', 'กรุณาเลือกสถานะ'); isValid = false; }
-                
-                if (formEls.refStatus.value === 'ลูกค้าของ Startup Up Real Estate') {
-                    if (!formEls.salesName.value) { showError('errSalesName', 'กรุณาเลือกเซลล์ที่ดูแล'); isValid = false; }
-                    if (formEls.salesName.value === 'อื่นๆ' && !formEls.salesOther.value) { showError('errSalesOther', 'กรุณาระบุชื่อเซลล์'); isValid = false; }
-                }
-            } else if (fgfStep === 4) {
-                if (!formEls.tarName.value) { showError('errTargetName', 'กรุณาระบุชื่อ-นามสกุล'); isValid = false; }
-                if (formEls.tarPhone.value.length !== 10) { showError('errTargetPhone', 'กรุณาระบุเบอร์ติดต่อ 10 หลัก'); isValid = false; }
-                // นำเงื่อนไขบังคับกรอก ID LINE และ โครงการที่สนใจ ออก
-            }
-            return isValid;
-        }
-
-        function updateFgfUI() {
-            [1,2,3,4].forEach(i => { document.getElementById('fgfStep'+i).classList.add('hidden'); });
-            document.getElementById('fgfStep'+fgfStep).classList.remove('hidden');
-
-            document.getElementById('fgfPrevBtn').classList.toggle('hidden', fgfStep === 1);
-            document.getElementById('fgfNextBtn').classList.toggle('hidden', fgfStep === 4);
-            document.getElementById('fgfSubmitBtn').classList.toggle('hidden', fgfStep !== 4);
-
-            // เปลี่ยนสีสถานะด้านบน
-            [1,2,3,4].forEach(i => {
-                const cir = document.getElementById('stepCir'+i);
-                if(fgfStep >= i) { cir.className = "w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-[#0B3D1B] text-white border-[#0B3D1B] transition-colors duration-300"; }
-                else { cir.className = "w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-white text-gray-400 border-gray-300 transition-colors duration-300"; }
-                
-                if(i < 4) {
-                    const line = document.getElementById('stepLine'+i);
-                    line.className = fgfStep > i ? "w-6 sm:w-8 h-1 bg-[#0B3D1B] transition-colors duration-300" : "w-6 sm:w-8 h-1 bg-gray-200 transition-colors duration-300";
-                }
-            });
-        }
-
-        document.getElementById('fgfNextBtn').addEventListener('click', () => {
-            if (validateFgfStep()) { fgfStep++; updateFgfUI(); }
-        });
-        document.getElementById('fgfPrevBtn').addEventListener('click', () => {
-            fgfStep--; updateFgfUI();
-        });
+        // ... (โค้ดจัดการโชว์/ซ่อน/ตรวจสอบ UI ให้คงไว้เหมือนเดิม) ...
 
         document.getElementById('fgfSubmitBtn').addEventListener('click', async () => {
             if (!validateFgfStep()) return;
@@ -983,23 +550,29 @@
             document.getElementById('loadingText').innerText = 'กำลังส่งข้อมูล...';
             document.getElementById('loadingOverlay').classList.remove('hidden');
 
-            const formData = new FormData();
-            formData.append('formType', 'friend_get_friend');
-            formData.append('email', formEls.email.value);
-            formData.append('referrerName', formEls.refName.value);
-            formData.append('referrerPhone', "'" + formEls.refPhone.value);
-            formData.append('referrerStatus', formEls.refStatus.value);
-            formData.append('salesName', formEls.salesName.value === 'อื่นๆ' ? formEls.salesOther.value : formEls.salesName.value);
-            formData.append('referredName', formEls.tarName.value);
-            formData.append('referredPhone', "'" + formEls.tarPhone.value);
-            formData.append('referredLineId', formEls.tarLine.value);
-            formData.append('projectOfInterest', formEls.tarProject.value);
+            // 🚀 เปลี่ยนเป็น URLSearchParams เช่นกัน
+            const params = new URLSearchParams();
+            params.append('formType', 'friend_get_friend');
+            params.append('email', formEls.email.value);
+            params.append('referrerName', formEls.refName.value);
+            params.append('referrerPhone', "'" + formEls.refPhone.value);
+            params.append('referrerStatus', formEls.refStatus.value);
+            params.append('salesName', formEls.salesName.value === 'อื่นๆ' ? formEls.salesOther.value : formEls.salesName.value);
+            params.append('referredName', formEls.tarName.value);
+            params.append('referredPhone', "'" + formEls.tarPhone.value);
+            params.append('referredLineId', formEls.tarLine.value);
+            params.append('projectOfInterest', formEls.tarProject.value);
             
             let finalShopName = hiddenShopName || "ไม่ระบุแหล่งที่มา";
-            formData.append('shopName', finalShopName);
+            params.append('shopName', finalShopName);
 
             try {
-                await fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' });
+                await fetch(SCRIPT_URL, { 
+                    method: 'POST', 
+                    body: params, 
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    mode: 'no-cors' 
+                });
                 document.getElementById('loadingOverlay').classList.add('hidden');
                 document.getElementById('fgfFormArea').classList.add('hidden');
                 document.getElementById('fgfSuccessArea').classList.remove('hidden');
@@ -1009,12 +582,5 @@
             }
         });
 
-        document.getElementById('fgfResetBtn').addEventListener('click', () => {
-            let redirectUrl = '?mode=fgf';
-            if (hiddenShopName) { redirectUrl += '&shop=' + hiddenShopName; }
-            window.location.href = redirectUrl;
-        });
-
+        // ...
     </script>
-</body>
-</html>
