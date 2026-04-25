@@ -44,14 +44,17 @@
 </head>
 <body class="h-[100dvh] w-screen flex flex-col items-center justify-center p-3 sm:p-4 relative overflow-hidden">
 
+    <!-- พื้นหลังเว็บไซต์ -->
     <div class="fixed inset-0 z-[-10] bg-blue-50/50">
         <img id="pageBackgroundImage" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Background" class="w-full h-full object-cover opacity-0 transition-opacity duration-1000 ease-in-out">
     </div>
 
+    <!-- ปุ่มลับสำหรับแอดมิน -->
     <button id="openAdminBtn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 focus:outline-none transition-colors z-[60] p-2 bg-white/60 backdrop-blur-md rounded-full shadow-sm hover:shadow-md border border-white/50" title="สำหรับผู้ดูแลระบบ">
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
     </button>
 
+    <!-- Popup Modal -->
     <div id="popupModal" class="hidden fixed inset-0 bg-black/75 z-[100] flex flex-col items-center justify-center p-4 backdrop-blur-sm transition-opacity">
         <div class="relative max-w-lg w-full bg-transparent rounded-2xl overflow-hidden transform transition-transform scale-95 flex flex-col items-center" id="popupContent">
             <div class="relative w-full">
@@ -67,6 +70,7 @@
         </div>
     </div>
 
+    <!-- Admin View -->
     <div id="adminView" class="hidden glass-effect w-full max-w-md rounded-2xl shadow-2xl overflow-hidden relative z-50 flex flex-col max-h-[90dvh]">
         <div class="bg-gray-800 p-3 sm:p-4 text-white text-center font-bold text-base sm:text-lg flex justify-between items-center shrink-0">
             <span class="flex items-center gap-2">
@@ -90,6 +94,7 @@
 
         <div id="adminDashboard" class="hidden p-4 sm:p-5 space-y-5 overflow-y-auto flex-1 custom-scrollbar">
             
+            <!-- โซนที่ 1: ตั้งค่าทั่วไป -->
             <div class="border-2 border-gray-200 rounded-xl overflow-hidden shadow-sm">
                 <div class="bg-gray-100 p-3 font-bold text-gray-700 flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -137,11 +142,13 @@
                             <button type="button" id="addShopOptionBtn" class="bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-black transition-colors">เพิ่ม</button>
                         </div>
                         <ul id="adminShopOptionsList" class="space-y-2 mt-3 max-h-40 overflow-y-auto custom-scrollbar pr-1">
-                            </ul>
+                            <!-- Options list injected by JS -->
+                        </ul>
                     </div>
                 </div>
             </div>
 
+            <!-- โซนที่ 2: Friend Get Friend -->
             <div class="border-2 border-[#D4AF37]/50 rounded-xl overflow-hidden shadow-sm">
                 <div class="bg-[#D4AF37]/20 p-3 font-bold text-[#0B3D1B] flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
@@ -180,6 +187,7 @@
         </div>
     </div>
 
+    <!-- Container สำหรับลูกค้าทั่วไป (ฟอร์มลงทะเบียนปกติ) -->
     <div id="mainView" class="hidden glass-effect w-full max-w-md rounded-[1.5rem] overflow-hidden flex flex-col shadow-2xl max-h-[92dvh]">
         <div class="pt-5 pb-3 px-6 text-center bg-white/95 border-b border-gray-100 relative shrink-0">
             <h1 class="text-xl md:text-2xl font-bold text-[#0B3D1B] tracking-tight">ลงทะเบียน</h1>
@@ -221,7 +229,11 @@
         </div>
     </div>
 
+    <!-- ========================================================================= -->
+    <!-- Container สำหรับ Friend Get Friend (ซ่อนไว้ จะโชว์เมื่อมี ?mode=fgf ใน URL) -->
+    <!-- ========================================================================= -->
     <div id="fgfView" class="hidden glass-effect w-full max-w-md rounded-[1.5rem] overflow-hidden flex flex-col shadow-2xl max-h-[95dvh] bg-white">
+        <!-- Header Ribbon -->
         <div class="h-3 w-full bg-[#D4AF37] shrink-0"></div>
         
         <div class="p-5 sm:p-6 flex-1 flex flex-col overflow-y-auto custom-scrollbar">
@@ -232,6 +244,7 @@
                     <p class="text-xs text-gray-500">แบบฟอร์มแนะนำซื้อบ้าน</p>
                 </div>
 
+                <!-- Stepper (เพิ่มเป็น 4 Steps) -->
                 <div class="flex items-center justify-center mb-5 shrink-0 px-2">
                     <div id="stepCir1" class="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 bg-[#0B3D1B] text-white border-[#0B3D1B] transition-colors duration-300">1</div>
                     <div id="stepLine1" class="w-6 sm:w-8 h-1 bg-gray-200 transition-colors duration-300"></div>
@@ -243,6 +256,7 @@
                 </div>
 
                 <div class="flex-1 overflow-y-auto custom-scrollbar pr-1">
+                    <!-- Step 1: เงื่อนไข -->
                     <div id="fgfStep1" class="space-y-4 animate-[fadeIn_0.3s_ease-out]">
                         <div class="bg-gray-50 px-4 pb-4 pt-0 rounded-xl border border-gray-100 text-xs sm:text-[13px] text-gray-700 leading-relaxed h-48 overflow-y-auto custom-scrollbar">
                             <h3 class="font-bold text-[#0B3D1B] text-sm sticky top-0 bg-gray-50 pt-4 pb-3 z-10">เงื่อนไข</h3>
@@ -276,6 +290,7 @@
                         </div>
                     </div>
 
+                    <!-- Step 2: รูปภาพโปรโมชั่น (NEW) -->
                     <div id="fgfStep2" class="hidden space-y-4 animate-[fadeIn_0.3s_ease-out]">
                         <h2 class="text-base font-bold text-[#0B3D1B] border-b pb-1 mb-2 border-[#D4AF37]/30">สิทธิพิเศษ Friend Get Friend</h2>
                         
@@ -288,6 +303,7 @@
                         </div>
                     </div>
 
+                    <!-- Step 3: ข้อมูลผู้แนะนำ -->
                     <div id="fgfStep3" class="hidden space-y-3.5 animate-[fadeIn_0.3s_ease-out]">
                         <h2 class="text-base font-bold text-[#0B3D1B] border-b pb-1 mb-2 border-[#D4AF37]/30">ข้อมูลผู้แนะนำ (ตัวคุณ)</h2>
                         <div>
@@ -329,6 +345,7 @@
                         </div>
                     </div>
 
+                    <!-- Step 4: ข้อมูลผู้ถูกแนะนำ -->
                     <div id="fgfStep4" class="hidden space-y-3.5 animate-[fadeIn_0.3s_ease-out]">
                         <h2 class="text-base font-bold text-[#D4AF37] border-b pb-1 mb-2 border-[#0B3D1B]/30">ข้อมูลผู้ถูกแนะนำ</h2>
                         <div>
@@ -354,6 +371,7 @@
                     </div>
                 </div>
 
+                <!-- Navigation Buttons -->
                 <div class="mt-4 flex gap-2 pt-3 border-t border-gray-100 shrink-0">
                     <button id="fgfPrevBtn" class="hidden flex-1 py-2.5 px-3 border-2 border-[#0B3D1B] text-[#0B3D1B] rounded-xl font-bold flex items-center justify-center gap-1 hover:bg-[#0B3D1B]/5 transition-colors text-sm">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg> ย้อนกลับ
@@ -367,6 +385,7 @@
                 </div>
             </div>
 
+            <!-- Success Screen -->
             <div id="fgfSuccessArea" class="hidden flex-1 flex flex-col items-center justify-center py-6 animate-[fadeIn_0.5s_ease-out]">
                 <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
                     <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -383,6 +402,7 @@
         </div>
     </div>
 
+    <!-- Loading Overlay กลางจอ -->
     <div id="loadingOverlay" class="hidden absolute inset-0 bg-white/95 backdrop-blur-sm z-[200] flex flex-col items-center justify-center rounded-[1.5rem]">
         <div class="w-12 h-12 border-4 border-[#0B3D1B]/20 border-t-[#0B3D1B] rounded-full animate-spin"></div>
         <p id="loadingText" class="mt-4 text-gray-800 font-semibold text-sm">กำลังดำเนินการ...</p>
@@ -398,7 +418,6 @@
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const LINE_URL = "https://line.me/R/ti/p/@SURE141"; 
-        // 💡 จุดที่ 1: อัปเดตลิงก์ Apps Script ใหม่ของไฟล์ All in One ที่นี่ค่ะ!
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXy7FI8XGruLEEySRqGFQNGoxHwdtzWktIuuRSQ2aaUMlBvpc0vobF6-naOPCscYVrxQ/exec";
 
         const YOUR_FIREBASE_CONFIG = {
@@ -440,6 +459,7 @@
         let currentShopOptions = ["อื่นๆ (แผ่นพับ, ใบปลิว, นามบัตร)"];
 
         function shouldShowPopup() {
+            // เอาเงื่อนไขที่บล็อก modeParam === 'fgf' ออก เพื่อให้ป็อปอัพขึ้นทุกหน้า
             if(!adminView.classList.contains('hidden')) return false;
             const hiddenUntil = localStorage.getItem('hidePopupUntil');
             if (hiddenUntil) {
@@ -924,6 +944,7 @@
             } else if (fgfStep === 4) {
                 if (!formEls.tarName.value) { showError('errTargetName', 'กรุณาระบุชื่อ-นามสกุล'); isValid = false; }
                 if (formEls.tarPhone.value.length !== 10) { showError('errTargetPhone', 'กรุณาระบุเบอร์ติดต่อ 10 หลัก'); isValid = false; }
+                // นำเงื่อนไขบังคับกรอก ID LINE และ โครงการที่สนใจ ออก
             }
             return isValid;
         }
